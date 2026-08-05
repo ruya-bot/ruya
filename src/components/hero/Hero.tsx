@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from "framer-motion";
-import Lottie from "lottie-react";
+import LottieImport from "lottie-react";
 import { useEffect, useRef, useState } from "react";
 
 import { HeroScene } from "./HeroScene";
@@ -7,6 +7,9 @@ import { OrbitRings } from "./OrbitRings";
 import loadingPulse from "@/lottie/loading-pulse.json";
 import scrollCue from "@/lottie/scroll-cue.json";
 import ctaArrow from "@/lottie/cta-arrow.json";
+
+// lottie-react is CJS; interop can hand back the module namespace object.
+const Lottie = ((LottieImport as any)?.default ?? LottieImport) as typeof LottieImport;
 
 export function Hero() {
   const prefersReduced = !!useReducedMotion();
