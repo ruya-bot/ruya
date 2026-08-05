@@ -6,7 +6,7 @@ type Item = { label: string; detail: string };
 const RINGS: Array<{ id: string; radius: number; duration: number; dir: 1 | -1; items: Item[] }> = [
   {
     id: "Experience",
-    radius: 176,
+    radius: 252,
     duration: 46,
     dir: 1,
     items: [
@@ -17,7 +17,7 @@ const RINGS: Array<{ id: string; radius: number; duration: number; dir: 1 | -1; 
   },
   {
     id: "Projects",
-    radius: 254,
+    radius: 330,
     duration: 62,
     dir: -1,
     items: [
@@ -29,7 +29,7 @@ const RINGS: Array<{ id: string; radius: number; duration: number; dir: 1 | -1; 
   },
   {
     id: "Stack",
-    radius: 330,
+    radius: 408,
     duration: 80,
     dir: 1,
     items: [
