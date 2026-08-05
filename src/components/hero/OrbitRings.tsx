@@ -47,18 +47,22 @@ function Tag({
   onHover,
   counterDuration,
   dir,
+  paused,
 }: {
   item: Item;
   onHover: (d: string | null) => void;
   counterDuration: number;
   dir: 1 | -1;
+  paused: boolean;
 }) {
   return (
     <motion.span
       className="pointer-events-auto inline-flex cursor-default items-center rounded-full border border-glass-border bg-glass px-3 py-1.5 text-[11px] font-medium tracking-wide text-foreground/80 backdrop-blur-md transition-colors hover:border-copper/50 hover:text-copper"
-      style={{ boxShadow: "var(--shadow-glass)" }}
-      animate={{ rotate: dir * -360 }}
-      transition={{ duration: counterDuration, ease: "linear", repeat: Infinity }}
+      style={{
+        boxShadow: "var(--shadow-glass)",
+        animation: `${dir === 1 ? "orbit-spin-rev" : "orbit-spin"} ${counterDuration}s linear infinite`,
+        animationPlayState: paused ? "paused" : "running",
+      }}
       onHoverStart={() => onHover(item.detail)}
       onHoverEnd={() => onHover(null)}
       onFocus={() => onHover(item.detail)}
@@ -133,17 +137,15 @@ export function OrbitRings({ reducedMotion }: { reducedMotion: boolean }) {
       onMouseOut={() => setPaused(false)}
     >
       {RINGS.map((ring) => (
-        <motion.div
+        <div
           key={ring.id}
           className="absolute rounded-full border border-glass-border/70"
-          style={{ width: ring.radius * 2, height: ring.radius * 2 }}
-          animate={{ rotate: ring.dir * 360 }}
-          transition={{
-            duration: ring.duration,
-            ease: "linear",
-            repeat: Infinity,
+          style={{
+            width: ring.radius * 2,
+            height: ring.radius * 2,
+            animation: `${ring.dir === 1 ? "orbit-spin" : "orbit-spin-rev"} ${ring.duration}s linear infinite`,
+            animationPlayState: paused ? "paused" : "running",
           }}
-          {...(paused && detail ? { style: { width: ring.radius * 2, height: ring.radius * 2, animationPlayState: "paused" } } : {})}
         >
           {ring.items.map((item, i) => {
             const angle = (i / ring.items.length) * Math.PI * 2;
@@ -157,11 +159,17 @@ export function OrbitRings({ reducedMotion }: { reducedMotion: boolean }) {
                   }px)`,
                 }}
               >
-                <Tag item={item} onHover={setDetail} counterDuration={ring.duration} dir={ring.dir} />
+                <Tag
+                  item={item}
+                  onHover={setDetail}
+                  counterDuration={ring.duration}
+                  dir={ring.dir}
+                  paused={paused}
+                />
               </span>
             );
           })}
-        </motion.div>
+        </div>
       ))}
       <motion.p
         className="absolute bottom-24 text-xs text-muted-foreground"
