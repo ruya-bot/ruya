@@ -1,5 +1,5 @@
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Environment, MeshTransmissionMaterial } from "@react-three/drei";
+import { ContactShadows, Environment, MeshTransmissionMaterial } from "@react-three/drei";
 import { useMemo, useRef, useEffect, useState } from "react";
 import * as THREE from "three";
 
@@ -71,7 +71,7 @@ function Particles({ count, still }: { count: number; still: boolean }) {
     for (let i = 0; i < count; i++) {
       lerpStage(v, a, b, i, k);
       dummy.position.set(v.x, v.y + breathe, v.z);
-      const s = 0.018 + (i % 5) * 0.002;
+      const s = 0.032 + (i % 5) * 0.004;
       dummy.scale.setScalar(s);
       dummy.rotation.set(v.x, v.y, v.z);
       dummy.updateMatrix();
@@ -119,18 +119,18 @@ function GlassBlocks({ still }: { still: boolean }) {
         <mesh key={i} position={[x, y, z]} rotation={[0.2 * i, 0.5 * i, 0.1 * i]}>
           <boxGeometry args={[w, h, d]} />
           <MeshTransmissionMaterial
-            samples={4}
-            resolution={256}
+            samples={3}
+            resolution={128}
             thickness={0.6}
-            roughness={0.18}
-            ior={1.4}
-            chromaticAberration={0.03}
+            roughness={0.14}
+            ior={1.45}
+            chromaticAberration={0.05}
             anisotropy={0.1}
-            distortion={0.1}
-            distortionScale={0.2}
+            distortion={0.15}
+            distortionScale={0.3}
             color="#ffffff"
-            attenuationColor="#f6efe8"
-            attenuationDistance={2}
+            attenuationColor="#e8d8c8"
+            attenuationDistance={1.2}
           />
         </mesh>
       ))}
@@ -193,10 +193,19 @@ export function HeroScene({
         }}
       >
         <CursorLight reactive={!reducedMotion} />
-        <Environment preset="studio" environmentIntensity={0.5} />
+        <Environment preset="studio" environmentIntensity={0.6} />
         <group position={[0, -0.1, 0]}>
           <Particles count={count} still={reducedMotion} />
           <GlassBlocks still={reducedMotion} />
+          <ContactShadows
+            position={[0, -1.5, 0]}
+            opacity={0.28}
+            scale={9}
+            blur={3.2}
+            far={4}
+            color="#7a4a24"
+            frames={reducedMotion ? 1 : Infinity}
+          />
         </group>
       </Canvas>
     </div>
