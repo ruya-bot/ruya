@@ -81,8 +81,6 @@ export function Hero() {
           AR retail, computer vision, applied ML — shipped end to end.
         </motion.p>
 
-        {mobile && <OrbitRings reducedMotion={prefersReduced} />}
-
         <motion.div {...rise(1.2)} className="relative mt-8">
           <button
             type="button"
