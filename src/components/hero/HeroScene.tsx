@@ -78,6 +78,7 @@ function Particles({ count, still }: { count: number; still: boolean }) {
       mesh.current.setMatrixAt(i, dummy.matrix);
     }
     mesh.current.instanceMatrix.needsUpdate = true;
+    if (!(globalThis as any).__pdbg) { (globalThis as any).__pdbg = { t, k, p0: [v.x, v.y, v.z] }; }
   });
 
   return (
