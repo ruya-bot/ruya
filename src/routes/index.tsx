@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Hero } from "@/components/hero/Hero";
+import { Nav } from "@/components/site/Nav";
+import { Hero } from "@/components/site/Hero";
+import { Sections } from "@/components/site/Sections";
 
 const title = "Mohammed Sanin — AI/ML Engineer & Product Builder";
 const description =
-  "AR retail, computer vision and applied ML — shipped end to end by Mohammed Sanin.";
+  "Portfolio of Mohammed Sanin: AR retail, computer vision and applied ML, designed and shipped end to end.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -12,8 +14,6 @@ export const Route = createFileRoute("/")({
       { name: "description", content: description },
       { property: "og:title", content: title },
       { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Index,
@@ -21,14 +21,10 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <main>
+    <main className="bg-background">
+      <Nav />
       <Hero />
-      <section id="work" className="mx-auto max-w-3xl px-6 py-32">
-        <h2 className="text-2xl font-semibold tracking-tight">Selected work</h2>
-        <p className="mt-3 text-sm text-muted-foreground">
-          The projects section lands here next.
-        </p>
-      </section>
+      <Sections />
     </main>
   );
 }
