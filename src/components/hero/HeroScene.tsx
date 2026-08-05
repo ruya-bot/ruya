@@ -1,5 +1,5 @@
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { ContactShadows, Environment, MeshTransmissionMaterial } from "@react-three/drei";
+import { ContactShadows, Environment, Lightformer, MeshTransmissionMaterial } from "@react-three/drei";
 import { useMemo, useRef, useEffect, useState } from "react";
 import * as THREE from "three";
 
@@ -200,7 +200,13 @@ export function HeroScene({
         }}
       >
         <CursorLight reactive={!reducedMotion} />
-        <Environment preset="studio" environmentIntensity={0.6} />
+        {/* Local studio environment (no remote HDRI fetch) */}
+        <Environment resolution={64} environmentIntensity={0.75}>
+          <color attach="background" args={["#ffffff"]} />
+          <Lightformer intensity={2.4} position={[0, 3, 2]} scale={[8, 4, 1]} color="#ffffff" />
+          <Lightformer intensity={1.2} position={[-4, 1, 1]} scale={[4, 6, 1]} color="#ffe4cc" />
+          <Lightformer intensity={0.9} position={[4, -1, -2]} scale={[5, 5, 1]} color="#f2f6ff" />
+        </Environment>
         <group position={[0, -0.1, 0]}>
           <Particles count={count} still={reducedMotion} />
           <GlassBlocks still={reducedMotion} />
