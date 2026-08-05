@@ -37,10 +37,12 @@ function lerpStage(
   k: number,
 ) {
   const j = i * 3;
+  const ax = a[j] ?? 0, ay = a[j + 1] ?? 0, az = a[j + 2] ?? 0;
+  const bx = b[j] ?? 0, by = b[j + 1] ?? 0, bz = b[j + 2] ?? 0;
   out.set(
-    a[j] + (b[j] - a[j]) * k,
-    a[j + 1] + (b[j + 1] - a[j + 1]) * k,
-    a[j + 2] + (b[j + 2] - a[j + 2]) * k,
+    ax + (bx - ax) * k,
+    ay + (by - ay) * k,
+    az + (bz - az) * k,
   );
 }
 
@@ -169,7 +171,7 @@ export function HeroScene({
   useEffect(() => {
     const el = wrap.current;
     if (!el) return;
-    const io = new IntersectionObserver(([e]) => setActive(e.isIntersecting), {
+    const io = new IntersectionObserver((entries) => setActive(!!entries[0]?.isIntersecting), {
       threshold: 0.05,
     });
     io.observe(el);
