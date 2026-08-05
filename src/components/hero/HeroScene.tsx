@@ -52,6 +52,15 @@ function Particles({ count, still }: { count: number; still: boolean }) {
   const dummy = useMemo(() => new THREE.Object3D(), []);
   const v = useMemo(() => new THREE.Vector3(), []);
   const start = useRef<number | null>(null);
+  const geometry = useMemo(() => new THREE.IcosahedronGeometry(1, 0), []);
+  const material = useMemo(
+    () => new THREE.MeshStandardMaterial({ color: COPPER, roughness: 0.35, metalness: 0.6 }),
+    [],
+  );
+  useEffect(() => () => {
+    geometry.dispose();
+    material.dispose();
+  }, [geometry, material]);
 
   useFrame(({ clock }) => {
     if (!mesh.current) return;
@@ -78,14 +87,10 @@ function Particles({ count, still }: { count: number; still: boolean }) {
       mesh.current.setMatrixAt(i, dummy.matrix);
     }
     mesh.current.instanceMatrix.needsUpdate = true;
-    if (!(globalThis as any).__pdbg) { (globalThis as any).__pdbg = { t, k, p0: [v.x, v.y, v.z] }; }
   });
 
   return (
-    <instancedMesh ref={mesh} args={[undefined, undefined, count]} castShadow={false}>
-      <icosahedronGeometry args={[1, 0]} />
-      <meshStandardMaterial color={COPPER} roughness={0.35} metalness={0.6} />
-    </instancedMesh>
+    <instancedMesh ref={mesh} args={[geometry, material, count]} frustumCulled={false} />
   );
 }
 
