@@ -17,7 +17,7 @@ export function Hero() {
     <section ref={ref} id="top" className="relative h-[112vh] overflow-hidden veil">
       <motion.div
         style={{ y: objectY, scale: objectScale }}
-        className="pointer-events-none absolute inset-0 flex items-center justify-center"
+        className="pointer-events-none absolute inset-0 flex items-end justify-center pb-[2vh]"
       >
         <motion.img
           src={heroObject}
@@ -27,13 +27,13 @@ export function Hero() {
           initial={{ opacity: 0, scale: 1.08, filter: "blur(24px)" }}
           animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
           transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1] }}
-          className="w-[min(76vh,780px)] max-w-none select-none"
+          className="w-[min(46vh,470px)] max-w-none select-none opacity-90 [mask-image:radial-gradient(70%_70%_at_50%_60%,#000_55%,transparent_100%)]"
         />
       </motion.div>
 
       <motion.div
         style={{ y: textY, opacity: fade }}
-        className="relative z-10 mx-auto flex h-screen max-w-6xl flex-col items-center justify-center px-6 text-center"
+        className="relative z-10 mx-auto flex h-screen max-w-6xl flex-col items-center justify-start px-6 pt-[16vh] text-center"
       >
         <motion.p
           initial={{ opacity: 0, y: 12 }}
