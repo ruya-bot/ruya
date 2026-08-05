@@ -186,7 +186,7 @@ export function HeroScene({
         frameloop={reducedMotion ? "demand" : active ? "always" : "never"}
         dpr={[1, mobile ? 1.5 : 2]}
         camera={{ position: [2.6, 1.9, 4.6], fov: 38 }}
-        gl={{ antialias: true, alpha: false }}
+        gl={{ antialias: true, alpha: false, preserveDrawingBuffer: true }}
         onCreated={({ gl }) => {
           gl.setClearColor("#ffffff", 1);
           requestAnimationFrame(onReady);
