@@ -187,8 +187,9 @@ export function HeroScene({
         dpr={[1, mobile ? 1.5 : 2]}
         camera={{ position: [2.6, 1.9, 4.6], fov: 38 }}
         gl={{ antialias: true, alpha: false, preserveDrawingBuffer: true }}
-        onCreated={({ gl }) => {
+        onCreated={({ gl, camera }) => {
           gl.setClearColor("#ffffff", 1);
+          camera.lookAt(0, 0, 0);
           requestAnimationFrame(onReady);
         }}
       >
