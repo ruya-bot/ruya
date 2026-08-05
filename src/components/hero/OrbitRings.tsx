@@ -154,9 +154,9 @@ export function OrbitRings({ reducedMotion }: { reducedMotion: boolean }) {
                 key={item.label}
                 className="absolute left-1/2 top-1/2"
                 style={{
-                  transform: `translate(-50%, -50%) translate(${Math.cos(angle) * ring.radius}px, ${
-                    Math.sin(angle) * ring.radius
-                  }px)`,
+                  transform: `translate(-50%, -50%) translate(${(
+                    Math.cos(angle) * ring.radius
+                  ).toFixed(2)}px, ${(Math.sin(angle) * ring.radius).toFixed(2)}px)`,
                 }}
               >
                 <Tag
