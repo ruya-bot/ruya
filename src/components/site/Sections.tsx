@@ -480,8 +480,10 @@ const technologies = [
 
 function ResearchAndTech() {
   const ref = useRef<HTMLDivElement>(null);
+  const { parallax } = useMotionProfile();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const y = useTransform(scrollYProgress, [0, 1], ["4%", "-4%"]);
+  const smooth = useSpring(scrollYProgress, SCROLL_SPRING.light);
+  const y = useTransform(smooth, [0, 1], ["4%", "-4%"]);
 
   return (
     <section id="research" className="relative isolate px-6 py-[14vh]">
@@ -506,7 +508,7 @@ function ResearchAndTech() {
             </div>
           </div>
 
-          <motion.div style={{ y }}>
+          <motion.div style={parallax ? { y } : {}}>
             <Reveal>
               <Kicker>Technologies</Kicker>
               <h2 className="display-xl mt-5 text-[clamp(1.8rem,3.4vw,2.6rem)]">
