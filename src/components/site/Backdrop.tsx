@@ -1,5 +1,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { SCROLL_SPRING } from "@/lib/motion";
+import { useMotionProfile } from "@/hooks/useMotionProfile";
 
 type Layer = { src: string; alt?: string };
 
@@ -7,6 +9,9 @@ type Layer = { src: string; alt?: string };
  * Ambient, low-opacity backdrop for a section. Renders 2–3 generated
  * textures at different parallax speeds behind the content. Purely
  * decorative — never blocks pointer events, masked into the white canvas.
+ *
+ * Reduced motion / low-end devices get a single static layer: no
+ * scroll listeners driving transforms, no compositing of 3 large images.
  */
 export function Backdrop({
   layers,
@@ -16,15 +21,12 @@ export function Backdrop({
   intensity?: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
+  const { parallax } = useMotionProfile();
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],
   });
-  const smooth = useSpring(scrollYProgress, {
-    stiffness: 60,
-    damping: 20,
-    mass: 0.4,
-  });
+  const smooth = useSpring(scrollYProgress, SCROLL_SPRING.base);
 
   const y0 = useTransform(smooth, [0, 1], ["-8%", "8%"]);
   const y1 = useTransform(smooth, [0, 1], ["12%", "-12%"]);
@@ -37,6 +39,9 @@ export function Backdrop({
 
   const ys = [y0, y1, y2];
   const os = [o0, o1, o2];
+  const staticOpacity = [0.5, 0.32, 0.2];
+
+  const visible = parallax ? layers.slice(0, 3) : layers.slice(0, 1);
 
   return (
     <div
@@ -44,7 +49,7 @@ export function Backdrop({
       aria-hidden
       className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
     >
-      {layers.slice(0, 3).map((layer, i) => (
+      {visible.map((layer, i) => (
         <motion.img
           key={layer.src}
           src={layer.src}
@@ -54,11 +59,19 @@ export function Backdrop({
           decoding="async"
           width={1920}
           height={1200}
-          style={{
-            y: ys[i] ?? y0,
-            scale: i === 0 ? s0 : 1.1,
-            opacity: os[i] ?? o2,
-          }}
+          style={
+            parallax
+              ? {
+                  y: ys[i] ?? y0,
+                  scale: i === 0 ? s0 : 1.1,
+                  opacity: os[i] ?? o2,
+                  willChange: "transform, opacity",
+                }
+              : {
+                  scale: 1.06,
+                  opacity: (staticOpacity[i] ?? 0.2) * intensity,
+                }
+          }
           className="absolute inset-0 h-full w-full select-none object-cover mix-blend-multiply [mask-image:radial-gradient(75%_65%_at_50%_50%,#000_0%,transparent_100%)]"
         />
       ))}
