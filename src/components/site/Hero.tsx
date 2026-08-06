@@ -1,6 +1,9 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { Backdrop } from "./Backdrop";
 import heroObject from "@/assets/hero-object.jpg";
+import bgHero1 from "@/assets/bg-hero-1.jpg";
+import bgHero2 from "@/assets/bg-hero-2.jpg";
 
 const words = ["Mohammed", "Sanin"];
 
@@ -14,7 +17,8 @@ export function Hero() {
   const fade = useTransform(smooth, [0, 0.7], [1, 0]);
 
   return (
-    <section ref={ref} id="top" className="relative h-[112vh] overflow-hidden veil">
+    <section ref={ref} id="top" className="veil relative isolate h-[112vh] overflow-hidden">
+      <Backdrop layers={[{ src: bgHero1 }, { src: bgHero2 }]} intensity={0.5} />
       <motion.div
         style={{ y: objectY, scale: objectScale }}
         className="pointer-events-none absolute inset-0 flex items-end justify-center pb-[2vh]"
