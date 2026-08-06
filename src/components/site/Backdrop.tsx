@@ -30,9 +30,13 @@ export function Backdrop({
   const y1 = useTransform(smooth, [0, 1], ["12%", "-12%"]);
   const y2 = useTransform(smooth, [0, 1], ["-4%", "16%"]);
   const s0 = useTransform(smooth, [0, 0.5, 1], [1.14, 1.04, 1.14]);
-  const o = useTransform(smooth, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
+  const fade = useTransform(smooth, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
+  const o0 = useTransform(fade, (v) => v * 0.6 * intensity);
+  const o1 = useTransform(fade, (v) => v * 0.38 * intensity);
+  const o2 = useTransform(fade, (v) => v * 0.24 * intensity);
 
   const ys = [y0, y1, y2];
+  const os = [o0, o1, o2];
 
   return (
     <div
@@ -53,15 +57,11 @@ export function Backdrop({
           style={{
             y: ys[i] ?? y0,
             scale: i === 0 ? s0 : 1.1,
-            opacity: o,
+            opacity: os[i] ?? o2,
           }}
           className="absolute inset-0 h-full w-full select-none object-cover mix-blend-multiply [mask-image:radial-gradient(75%_65%_at_50%_50%,#000_0%,transparent_100%)]"
         />
       ))}
-      <div
-        className="absolute inset-0 bg-background"
-        style={{ opacity: 1 - 0.55 * intensity }}
-      />
     </div>
   );
 }
