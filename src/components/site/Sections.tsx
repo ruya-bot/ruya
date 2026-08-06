@@ -55,16 +55,21 @@ function SectionSeam() {
 
 function Studio() {
   const ref = useRef<HTMLDivElement>(null);
+  const { parallax } = useMotionProfile();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.9, 1, 0.94]);
-  const y = useTransform(scrollYProgress, [0, 1], ["6%", "-6%"]);
+  const smooth = useSpring(scrollYProgress, SCROLL_SPRING.base);
+  const scale = useTransform(smooth, [0, 0.5, 1], [0.92, 1, 0.95]);
+  const y = useTransform(smooth, [0, 1], ["5%", "-5%"]);
 
   return (
     <section id="about" className="relative isolate px-6 py-[14vh]">
       <Backdrop layers={[{ src: bgApproach1 }, { src: bgApproach2 }]} intensity={0.9} />
       <div className="mx-auto max-w-6xl">
         <div ref={ref} className="grid items-center gap-12 md:grid-cols-2">
-          <motion.div style={{ scale, y }} className="overflow-hidden rounded-3xl">
+          <motion.div
+            style={parallax ? { scale, y } : {}}
+            className="overflow-hidden rounded-3xl"
+          >
             <img
               src={vision}
               alt="Wireframe mesh scanning a sculptural form"
