@@ -203,7 +203,7 @@ function Expertise() {
         <div className="mt-10 grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
           {expertise.map((e, i) => (
             <Reveal key={e} delay={i * 0.05} className="bg-background">
-              <div className="h-full px-6 py-8 transition-colors duration-200 hover:bg-surface">
+              <div className="h-full px-6 py-8 transition-colors duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-surface">
                 <p className="text-[10px] font-semibold tracking-[0.2em] text-muted-foreground">
                   {String(i + 1).padStart(2, "0")}
                 </p>
@@ -500,7 +500,7 @@ function ResearchAndTech() {
             <div className="mt-8 flex flex-wrap gap-3">
               {interests.map((s, i) => (
                 <Reveal key={s} delay={i * 0.035}>
-                  <span className="inline-block rounded-xl border border-border px-4 py-2 text-sm font-medium transition-colors duration-200 hover:border-copper hover:text-copper">
+                  <span className="inline-block rounded-xl border border-border px-4 py-2 text-sm font-medium transition-[color,border-color,transform] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:border-copper hover:text-copper">
                     {s}
                   </span>
                 </Reveal>
@@ -518,7 +518,7 @@ function ResearchAndTech() {
             <div className="mt-8 flex flex-wrap gap-3">
               {technologies.map((s, i) => (
                 <Reveal key={s} delay={i * 0.03}>
-                  <span className="inline-block rounded-xl border border-border px-4 py-2 text-sm font-medium transition-colors duration-200 hover:border-copper hover:text-copper">
+                  <span className="inline-block rounded-xl border border-border px-4 py-2 text-sm font-medium transition-[color,border-color,transform] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:border-copper hover:text-copper">
                     {s}
                   </span>
                 </Reveal>
