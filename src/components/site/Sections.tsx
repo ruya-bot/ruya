@@ -1,7 +1,15 @@
 import { useEffect, useRef, useState } from "react";
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import {
+  motion,
+  useInView,
+  useScroll,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 import { Reveal } from "./Reveal";
 import { Backdrop } from "./Backdrop";
+import { EASE, SCROLL_SPRING } from "@/lib/motion";
+import { useMotionProfile } from "@/hooks/useMotionProfile";
 import vision from "@/assets/vision.jpg";
 import layers from "@/assets/layers.jpg";
 import bgApproach1 from "@/assets/bg-approach-1.jpg";
@@ -22,20 +30,46 @@ function Kicker({ children }: { children: React.ReactNode }) {
   );
 }
 
+/**
+ * Hairline that draws itself as one section hands off to the next.
+ * Gives the page a continuous rhythm instead of hard section edges.
+ */
+function SectionSeam() {
+  const { choreography } = useMotionProfile();
+  if (!choreography) {
+    return <div aria-hidden className="mx-auto h-px max-w-6xl bg-border" />;
+  }
+  return (
+    <motion.div
+      aria-hidden
+      initial={{ scaleX: 0, opacity: 0 }}
+      whileInView={{ scaleX: 1, opacity: 1 }}
+      viewport={{ once: true, amount: 0.8 }}
+      transition={{ duration: 1.1, ease: EASE.outExpo }}
+      className="mx-auto h-px max-w-6xl origin-center bg-gradient-to-r from-transparent via-border to-transparent"
+    />
+  );
+}
+
 /* ---------------------------------------------------------------- Studio */
 
 function Studio() {
   const ref = useRef<HTMLDivElement>(null);
+  const { parallax } = useMotionProfile();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.9, 1, 0.94]);
-  const y = useTransform(scrollYProgress, [0, 1], ["6%", "-6%"]);
+  const smooth = useSpring(scrollYProgress, SCROLL_SPRING.base);
+  const scale = useTransform(smooth, [0, 0.5, 1], [0.92, 1, 0.95]);
+  const y = useTransform(smooth, [0, 1], ["5%", "-5%"]);
 
   return (
     <section id="about" className="relative isolate px-6 py-[14vh]">
       <Backdrop layers={[{ src: bgApproach1 }, { src: bgApproach2 }]} intensity={0.9} />
       <div className="mx-auto max-w-6xl">
         <div ref={ref} className="grid items-center gap-12 md:grid-cols-2">
-          <motion.div style={{ scale, y }} className="overflow-hidden rounded-3xl">
+          <motion.div
+            style={parallax ? { scale, y } : {}}
+            className="overflow-hidden rounded-3xl"
+          >
             <img
               src={vision}
               alt="Wireframe mesh scanning a sculptural form"
@@ -97,9 +131,11 @@ const timeline = [
 
 function Founder() {
   const ref = useRef<HTMLDivElement>(null);
+  const { parallax } = useMotionProfile();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const y = useTransform(scrollYProgress, [0, 1], ["6%", "-6%"]);
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.92, 1, 0.95]);
+  const smooth = useSpring(scrollYProgress, SCROLL_SPRING.base);
+  const y = useTransform(smooth, [0, 1], ["5%", "-5%"]);
+  const scale = useTransform(smooth, [0, 0.5, 1], [0.94, 1, 0.97]);
 
   return (
     <section className="relative isolate px-6 py-[14vh]">
@@ -125,7 +161,7 @@ function Founder() {
             </p>
           </Reveal>
 
-          <motion.div style={{ y, scale }} className="md:order-first">
+          <motion.div style={parallax ? { y, scale } : {}} className="md:order-first">
             <ol className="relative space-y-6 border-l border-border pl-7">
               {timeline.map((t, i) => (
                 <Reveal key={t[0]} delay={i * 0.05}>
@@ -167,7 +203,7 @@ function Expertise() {
         <div className="mt-10 grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
           {expertise.map((e, i) => (
             <Reveal key={e} delay={i * 0.05} className="bg-background">
-              <div className="h-full px-6 py-8 transition-colors duration-200 hover:bg-surface">
+              <div className="h-full px-6 py-8 transition-colors duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-surface">
                 <p className="text-[10px] font-semibold tracking-[0.2em] text-muted-foreground">
                   {String(i + 1).padStart(2, "0")}
                 </p>
@@ -193,11 +229,12 @@ const signals = [
 function Counter({ value, suffix }: { value: number; suffix: string }) {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.6 });
+  const { choreography } = useMotionProfile();
   const [n, setN] = useState(0);
 
   useEffect(() => {
     if (!inView) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (!choreography) {
       setN(value);
       return;
     }
@@ -210,7 +247,7 @@ function Counter({ value, suffix }: { value: number; suffix: string }) {
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [inView, value]);
+  }, [inView, value, choreography]);
 
   return (
     <span ref={ref}>
@@ -289,6 +326,67 @@ const projects = [
   },
 ];
 
+function ProjectCard({
+  p,
+  i,
+}: {
+  p: (typeof projects)[number];
+  i: number;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const { parallax } = useMotionProfile();
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start center", "end start"],
+  });
+  const smooth = useSpring(scrollYProgress, SCROLL_SPRING.base);
+  // Outgoing card recedes slightly as the next one slides over it.
+  const scale = useTransform(smooth, [0, 1], [1, 0.96]);
+  const opacity = useTransform(smooth, [0, 0.85, 1], [1, 1, 0.55]);
+
+  return (
+    <div ref={ref} className="sticky" style={{ top: `calc(18vh + ${i * 22}px)` }}>
+      <Reveal delay={i * 0.04}>
+        <motion.article
+          style={parallax ? { scale, opacity } : {}}
+          className="group grid gap-6 rounded-3xl border border-border bg-surface p-8 shadow-[var(--shadow-soft)] transition-[transform,border-color,box-shadow] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:border-copper/40 hover:shadow-[var(--shadow-float)] md:grid-cols-[1fr_1.5fr] md:p-12"
+        >
+          <div>
+            <p className="text-[11px] font-semibold tracking-[0.24em] text-muted-foreground transition-colors duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:text-copper">
+              {String(i + 1).padStart(2, "0")}
+            </p>
+            <h3 className="display-xl mt-4 text-[clamp(1.8rem,3.2vw,2.6rem)] transition-colors duration-300 delay-75 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:text-copper">
+              {p.name}
+            </h3>
+            <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+              {p.status}
+            </p>
+          </div>
+          <div>
+            <p className="text-lg font-medium">{p.line}</p>
+            <ul className="mt-6 flex flex-wrap gap-2">
+              {p.tags.map((t) => (
+                <li
+                  key={t}
+                  className="rounded-lg border border-border px-3 py-1.5 text-[13px] text-muted-foreground transition-colors duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-copper/50 hover:text-foreground"
+                >
+                  {t}
+                </li>
+              ))}
+            </ul>
+            <span className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-copper">
+              View
+              <span className="transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1.5">
+                →
+              </span>
+            </span>
+          </div>
+        </motion.article>
+      </Reveal>
+    </div>
+  );
+}
+
 function Projects() {
   return (
     <section id="projects" className="relative isolate px-6 py-[14vh]">
@@ -303,42 +401,7 @@ function Projects() {
 
         <div className="mt-14 space-y-6">
           {projects.map((p, i) => (
-            <div key={p.name} className="sticky" style={{ top: `calc(18vh + ${i * 22}px)` }}>
-              <Reveal delay={i * 0.04}>
-                <article className="group grid gap-6 rounded-3xl border border-border bg-surface p-8 shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:border-copper/40 md:grid-cols-[1fr_1.5fr] md:p-12">
-                  <div>
-                    <p className="text-[11px] font-semibold tracking-[0.24em] text-muted-foreground transition-colors duration-200 group-hover:text-copper">
-                      {String(i + 1).padStart(2, "0")}
-                    </p>
-                    <h3 className="display-xl mt-4 text-[clamp(1.8rem,3.2vw,2.6rem)]">
-                      {p.name}
-                    </h3>
-                    <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-                      {p.status}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-lg font-medium">{p.line}</p>
-                    <ul className="mt-6 flex flex-wrap gap-2">
-                      {p.tags.map((t) => (
-                        <li
-                          key={t}
-                          className="rounded-lg border border-border px-3 py-1.5 text-[13px] text-muted-foreground"
-                        >
-                          {t}
-                        </li>
-                      ))}
-                    </ul>
-                    <span className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-copper">
-                      View
-                      <span className="transition-transform duration-200 group-hover:translate-x-1.5">
-                        →
-                      </span>
-                    </span>
-                  </div>
-                </article>
-              </Reveal>
-            </div>
+            <ProjectCard key={p.name} p={p} i={i} />
           ))}
         </div>
       </div>
@@ -417,8 +480,10 @@ const technologies = [
 
 function ResearchAndTech() {
   const ref = useRef<HTMLDivElement>(null);
+  const { parallax } = useMotionProfile();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const y = useTransform(scrollYProgress, [0, 1], ["4%", "-4%"]);
+  const smooth = useSpring(scrollYProgress, SCROLL_SPRING.light);
+  const y = useTransform(smooth, [0, 1], ["4%", "-4%"]);
 
   return (
     <section id="research" className="relative isolate px-6 py-[14vh]">
@@ -435,7 +500,7 @@ function ResearchAndTech() {
             <div className="mt-8 flex flex-wrap gap-3">
               {interests.map((s, i) => (
                 <Reveal key={s} delay={i * 0.035}>
-                  <span className="inline-block rounded-xl border border-border px-4 py-2 text-sm font-medium transition-colors duration-200 hover:border-copper hover:text-copper">
+                  <span className="inline-block rounded-xl border border-border px-4 py-2 text-sm font-medium transition-[color,border-color,transform] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:border-copper hover:text-copper">
                     {s}
                   </span>
                 </Reveal>
@@ -443,7 +508,7 @@ function ResearchAndTech() {
             </div>
           </div>
 
-          <motion.div style={{ y }}>
+          <motion.div style={parallax ? { y } : {}}>
             <Reveal>
               <Kicker>Technologies</Kicker>
               <h2 className="display-xl mt-5 text-[clamp(1.8rem,3.4vw,2.6rem)]">
@@ -453,7 +518,7 @@ function ResearchAndTech() {
             <div className="mt-8 flex flex-wrap gap-3">
               {technologies.map((s, i) => (
                 <Reveal key={s} delay={i * 0.03}>
-                  <span className="inline-block rounded-xl border border-border px-4 py-2 text-sm font-medium transition-colors duration-200 hover:border-copper hover:text-copper">
+                  <span className="inline-block rounded-xl border border-border px-4 py-2 text-sm font-medium transition-[color,border-color,transform] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:border-copper hover:text-copper">
                     {s}
                   </span>
                 </Reveal>
@@ -588,11 +653,15 @@ export function Sections() {
   return (
     <>
       <Studio />
+      <SectionSeam />
       <Founder />
+      <SectionSeam />
       <Expertise />
       <Signals />
       <Projects />
+      <SectionSeam />
       <AlsoBuilt />
+      <SectionSeam />
       <ResearchAndTech />
       <Contact />
       <Footer />
