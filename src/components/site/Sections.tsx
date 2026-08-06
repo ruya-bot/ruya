@@ -326,6 +326,67 @@ const projects = [
   },
 ];
 
+function ProjectCard({
+  p,
+  i,
+}: {
+  p: (typeof projects)[number];
+  i: number;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const { parallax } = useMotionProfile();
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start center", "end start"],
+  });
+  const smooth = useSpring(scrollYProgress, SCROLL_SPRING.base);
+  // Outgoing card recedes slightly as the next one slides over it.
+  const scale = useTransform(smooth, [0, 1], [1, 0.96]);
+  const opacity = useTransform(smooth, [0, 0.85, 1], [1, 1, 0.55]);
+
+  return (
+    <div ref={ref} className="sticky" style={{ top: `calc(18vh + ${i * 22}px)` }}>
+      <Reveal delay={i * 0.04}>
+        <motion.article
+          style={parallax ? { scale, opacity } : {}}
+          className="group grid gap-6 rounded-3xl border border-border bg-surface p-8 shadow-[var(--shadow-soft)] transition-[transform,border-color,box-shadow] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:border-copper/40 hover:shadow-[var(--shadow-float)] md:grid-cols-[1fr_1.5fr] md:p-12"
+        >
+          <div>
+            <p className="text-[11px] font-semibold tracking-[0.24em] text-muted-foreground transition-colors duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:text-copper">
+              {String(i + 1).padStart(2, "0")}
+            </p>
+            <h3 className="display-xl mt-4 text-[clamp(1.8rem,3.2vw,2.6rem)] transition-colors duration-300 delay-75 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:text-copper">
+              {p.name}
+            </h3>
+            <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+              {p.status}
+            </p>
+          </div>
+          <div>
+            <p className="text-lg font-medium">{p.line}</p>
+            <ul className="mt-6 flex flex-wrap gap-2">
+              {p.tags.map((t) => (
+                <li
+                  key={t}
+                  className="rounded-lg border border-border px-3 py-1.5 text-[13px] text-muted-foreground transition-colors duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-copper/50 hover:text-foreground"
+                >
+                  {t}
+                </li>
+              ))}
+            </ul>
+            <span className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-copper">
+              View
+              <span className="transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1.5">
+                →
+              </span>
+            </span>
+          </div>
+        </motion.article>
+      </Reveal>
+    </div>
+  );
+}
+
 function Projects() {
   return (
     <section id="projects" className="relative isolate px-6 py-[14vh]">
@@ -340,42 +401,7 @@ function Projects() {
 
         <div className="mt-14 space-y-6">
           {projects.map((p, i) => (
-            <div key={p.name} className="sticky" style={{ top: `calc(18vh + ${i * 22}px)` }}>
-              <Reveal delay={i * 0.04}>
-                <article className="group grid gap-6 rounded-3xl border border-border bg-surface p-8 shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:border-copper/40 md:grid-cols-[1fr_1.5fr] md:p-12">
-                  <div>
-                    <p className="text-[11px] font-semibold tracking-[0.24em] text-muted-foreground transition-colors duration-200 group-hover:text-copper">
-                      {String(i + 1).padStart(2, "0")}
-                    </p>
-                    <h3 className="display-xl mt-4 text-[clamp(1.8rem,3.2vw,2.6rem)]">
-                      {p.name}
-                    </h3>
-                    <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-                      {p.status}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-lg font-medium">{p.line}</p>
-                    <ul className="mt-6 flex flex-wrap gap-2">
-                      {p.tags.map((t) => (
-                        <li
-                          key={t}
-                          className="rounded-lg border border-border px-3 py-1.5 text-[13px] text-muted-foreground"
-                        >
-                          {t}
-                        </li>
-                      ))}
-                    </ul>
-                    <span className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-copper">
-                      View
-                      <span className="transition-transform duration-200 group-hover:translate-x-1.5">
-                        →
-                      </span>
-                    </span>
-                  </div>
-                </article>
-              </Reveal>
-            </div>
+            <ProjectCard key={p.name} p={p} i={i} />
           ))}
         </div>
       </div>
