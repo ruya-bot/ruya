@@ -1,8 +1,18 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Reveal } from "./Reveal";
+import { Backdrop } from "./Backdrop";
 import vision from "@/assets/vision.jpg";
 import layers from "@/assets/layers.jpg";
+import bgApproach1 from "@/assets/bg-approach-1.jpg";
+import bgApproach2 from "@/assets/bg-approach-2.jpg";
+import bgLayers1 from "@/assets/bg-layers-1.jpg";
+import bgLayers2 from "@/assets/bg-layers-2.jpg";
+import bgWork1 from "@/assets/bg-work-1.jpg";
+import bgWork2 from "@/assets/bg-work-2.jpg";
+import bgStack1 from "@/assets/bg-stack-1.jpg";
+import bgClosing1 from "@/assets/bg-closing-1.jpg";
+import bgHero2 from "@/assets/bg-hero-2.jpg";
 
 function PinnedVisual({
   src,
@@ -12,6 +22,7 @@ function PinnedVisual({
   body,
   id,
   flip,
+  backdrop,
 }: {
   src: string;
   alt: string;
@@ -20,6 +31,7 @@ function PinnedVisual({
   body: string;
   id: string;
   flip?: boolean;
+  backdrop: string[];
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
@@ -28,7 +40,9 @@ function PinnedVisual({
   const opacity = useTransform(scrollYProgress, [0, 0.25, 0.8, 1], [0, 1, 1, 0.3]);
 
   return (
-    <section id={id} className="mx-auto max-w-6xl px-6 py-[14vh]">
+    <section id={id} className="relative isolate px-6 py-[14vh]">
+      <Backdrop layers={backdrop.map((src) => ({ src }))} intensity={0.9} />
+      <div className="mx-auto max-w-6xl">
       <div
         ref={ref}
         className={`grid items-center gap-12 md:grid-cols-2 ${flip ? "md:[&>*:first-child]:order-2" : ""}`}
@@ -52,6 +66,7 @@ function PinnedVisual({
             {body}
           </p>
         </Reveal>
+      </div>
       </div>
     </section>
   );
@@ -77,7 +92,9 @@ const projects = [
 
 function Projects() {
   return (
-    <section id="work" className="mx-auto max-w-6xl px-6 py-[10vh]">
+    <section id="work" className="relative isolate px-6 py-[10vh]">
+      <Backdrop layers={[{ src: bgWork1 }, { src: bgWork2 }]} intensity={0.8} />
+      <div className="mx-auto max-w-6xl">
       <Reveal>
         <h2 className="display-xl text-[clamp(2.4rem,6vw,5rem)]">
           Selected <span className="text-copper-gradient">work</span>
@@ -105,6 +122,7 @@ function Projects() {
           </div>
         ))}
       </div>
+      </div>
     </section>
   );
 }
@@ -122,7 +140,9 @@ const stack = [
 
 function Stack() {
   return (
-    <section id="stack" className="mx-auto max-w-6xl px-6 py-[14vh]">
+    <section id="stack" className="relative isolate px-6 py-[14vh]">
+      <Backdrop layers={[{ src: bgStack1 }, { src: bgHero2 }]} intensity={0.55} />
+      <div className="mx-auto max-w-6xl">
       <Reveal>
         <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-copper">
           The complete package
@@ -137,13 +157,18 @@ function Stack() {
           </Reveal>
         ))}
       </div>
+      </div>
     </section>
   );
 }
 
 function Closing() {
   return (
-    <section id="contact" className="veil border-t border-border px-6 py-[18vh] text-center">
+    <section
+      id="contact"
+      className="veil relative isolate border-t border-border px-6 py-[18vh] text-center"
+    >
+      <Backdrop layers={[{ src: bgClosing1 }, { src: bgLayers2 }]} intensity={0.7} />
       <Reveal>
         <h2 className="display-xl mx-auto max-w-3xl text-[clamp(2.4rem,6vw,5rem)]">
           Let's build something
@@ -173,6 +198,7 @@ export function Sections() {
         kicker="Approach"
         title="Systems that see."
         body="Computer vision models tuned for the messy real world — retail lighting, occlusion, motion — then compressed until they run anywhere."
+        backdrop={[bgApproach1, bgApproach2]}
       />
       <Projects />
       <PinnedVisual
@@ -183,6 +209,7 @@ export function Sections() {
         title="Model, product, polish."
         body="Research isn't the finish line. Every layer — data, inference, interface — is designed as one continuous product."
         flip
+        backdrop={[bgLayers1, bgLayers2]}
       />
       <Stack />
       <Closing />
