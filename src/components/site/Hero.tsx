@@ -36,7 +36,7 @@ export function Hero() {
       <Backdrop layers={[{ src: bgHero1 }, { src: bgHero2 }]} intensity={0.5} />
 
       <motion.div
-        style={parallax ? { y: objectY, scale: objectScale, filter: objectBlur } : undefined}
+        style={parallax ? { y: objectY, scale: objectScale, filter: objectBlur } : {}}
         className="pointer-events-none absolute inset-0 flex items-end justify-center pb-[2vh]"
       >
         <motion.img
@@ -52,7 +52,7 @@ export function Hero() {
       </motion.div>
 
       <motion.div
-        style={parallax ? { y: textY, opacity: fade } : undefined}
+        style={parallax ? { y: textY, opacity: fade } : {}}
         className="relative z-10 mx-auto flex h-screen max-w-5xl flex-col items-center justify-start px-6 pt-[17vh] text-center"
       >
         <motion.p
@@ -115,7 +115,7 @@ export function Hero() {
 
       {choreography && (
         <motion.div
-          style={parallax ? { opacity: cueFade } : undefined}
+          style={parallax ? { opacity: cueFade } : {}}
           className="absolute inset-x-0 bottom-[12vh] z-10 flex justify-center"
         >
           <div className="h-9 w-[22px] rounded-full border border-border" aria-hidden="true">
