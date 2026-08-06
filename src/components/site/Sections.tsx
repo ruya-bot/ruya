@@ -653,11 +653,15 @@ export function Sections() {
   return (
     <>
       <Studio />
+      <SectionSeam />
       <Founder />
+      <SectionSeam />
       <Expertise />
       <Signals />
       <Projects />
+      <SectionSeam />
       <AlsoBuilt />
+      <SectionSeam />
       <ResearchAndTech />
       <Contact />
       <Footer />
