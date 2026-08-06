@@ -131,9 +131,11 @@ const timeline = [
 
 function Founder() {
   const ref = useRef<HTMLDivElement>(null);
+  const { parallax } = useMotionProfile();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const y = useTransform(scrollYProgress, [0, 1], ["6%", "-6%"]);
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.92, 1, 0.95]);
+  const smooth = useSpring(scrollYProgress, SCROLL_SPRING.base);
+  const y = useTransform(smooth, [0, 1], ["5%", "-5%"]);
+  const scale = useTransform(smooth, [0, 0.5, 1], [0.94, 1, 0.97]);
 
   return (
     <section className="relative isolate px-6 py-[14vh]">
@@ -159,7 +161,7 @@ function Founder() {
             </p>
           </Reveal>
 
-          <motion.div style={{ y, scale }} className="md:order-first">
+          <motion.div style={parallax ? { y, scale } : {}} className="md:order-first">
             <ol className="relative space-y-6 border-l border-border pl-7">
               {timeline.map((t, i) => (
                 <Reveal key={t[0]} delay={i * 0.05}>
