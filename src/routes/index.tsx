@@ -3,9 +3,9 @@ import { Nav } from "@/components/site/Nav";
 import { Hero } from "@/components/site/Hero";
 import { Sections } from "@/components/site/Sections";
 
-const title = "Mohammed Sanin — AI/ML Engineer & Product Builder";
+const title = "Ru'ya — AI Systems. Designed with Purpose.";
 const description =
-  "Portfolio of Mohammed Sanin: AR retail, computer vision and applied ML, designed and shipped end to end.";
+  "Ru'ya is the AI engineering studio of Mohammed Sanin, building intelligent systems across computer vision, generative AI, deep learning, autonomous agents, and human-centered products.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -14,6 +14,22 @@ export const Route = createFileRoute("/")({
       { name: "description", content: description },
       { property: "og:title", content: title },
       { property: "og:description", content: description },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "/" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+    links: [{ rel: "canonical", href: "/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "Ru'ya Studio",
+          description,
+          founder: { "@type": "Person", name: "Mohammed Sanin", jobTitle: "AI Research Engineer" },
+        }),
+      },
     ],
   }),
   component: Index,

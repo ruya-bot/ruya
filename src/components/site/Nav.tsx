@@ -1,6 +1,11 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 
-const links = ["Work", "Approach", "Stack", "Contact"];
+const links = [
+  { label: "About", href: "#about" },
+  { label: "Research", href: "#research" },
+  { label: "Projects", href: "#projects" },
+  { label: "Contact", href: "#contact" },
+];
 
 export function Nav() {
   const { scrollY } = useScroll();
@@ -17,16 +22,16 @@ export function Nav() {
     >
       <nav className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
         <a href="#top" className="text-[13px] font-extrabold tracking-tight">
-          MS<span className="text-copper">.</span>
+          Ru'ya<span className="text-copper">.</span>
         </a>
         <ul className="hidden gap-8 text-[13px] text-muted-foreground sm:flex">
           {links.map((l) => (
-            <li key={l}>
+            <li key={l.label}>
               <a
-                href={`#${l.toLowerCase()}`}
-                className="transition-colors hover:text-foreground"
+                href={l.href}
+                className="rounded-sm transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-copper"
               >
-                {l}
+                {l.label}
               </a>
             </li>
           ))}
