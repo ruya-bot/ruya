@@ -1,5 +1,5 @@
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { Reveal } from "./Reveal";
 import { Backdrop } from "./Backdrop";
 import vision from "@/assets/vision.jpg";
@@ -14,205 +14,588 @@ import bgStack1 from "@/assets/bg-stack-1.jpg";
 import bgClosing1 from "@/assets/bg-closing-1.jpg";
 import bgHero2 from "@/assets/bg-hero-2.jpg";
 
-function PinnedVisual({
-  src,
-  alt,
-  kicker,
-  title,
-  body,
-  id,
-  flip,
-  backdrop,
-}: {
-  src: string;
-  alt: string;
-  kicker: string;
-  title: string;
-  body: string;
-  id: string;
-  flip?: boolean;
-  backdrop: string[];
-}) {
+function Kicker({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-copper">
+      {children}
+    </p>
+  );
+}
+
+/* ---------------------------------------------------------------- Studio */
+
+function Studio() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.86, 1, 0.92]);
-  const y = useTransform(scrollYProgress, [0, 1], ["8%", "-8%"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.25, 0.8, 1], [0, 1, 1, 0.3]);
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.9, 1, 0.94]);
+  const y = useTransform(scrollYProgress, [0, 1], ["6%", "-6%"]);
 
   return (
-    <section id={id} className="relative isolate px-6 py-[14vh]">
-      <Backdrop layers={backdrop.map((src) => ({ src }))} intensity={0.9} />
+    <section id="about" className="relative isolate px-6 py-[14vh]">
+      <Backdrop layers={[{ src: bgApproach1 }, { src: bgApproach2 }]} intensity={0.9} />
       <div className="mx-auto max-w-6xl">
-      <div
-        ref={ref}
-        className={`grid items-center gap-12 md:grid-cols-2 ${flip ? "md:[&>*:first-child]:order-2" : ""}`}
-      >
-        <motion.div style={{ scale, y, opacity }} className="overflow-hidden rounded-[2rem]">
-          <img
-            src={src}
-            alt={alt}
-            loading="lazy"
-            width={1600}
-            height={1008}
-            className="w-full"
-          />
-        </motion.div>
-        <Reveal>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-copper">
-            {kicker}
-          </p>
-          <h2 className="display-xl mt-5 text-[clamp(2rem,4.4vw,3.4rem)]">{title}</h2>
-          <p className="mt-5 max-w-md text-[17px] leading-relaxed text-muted-foreground">
-            {body}
-          </p>
+        <div ref={ref} className="grid items-center gap-12 md:grid-cols-2">
+          <motion.div style={{ scale, y }} className="overflow-hidden rounded-3xl">
+            <img
+              src={vision}
+              alt="Wireframe mesh scanning a sculptural form"
+              loading="lazy"
+              width={1600}
+              height={1008}
+              className="w-full"
+            />
+          </motion.div>
+          <Reveal>
+            <Kicker>Studio Thesis</Kicker>
+            <h2 className="display-xl mt-5 text-[clamp(2rem,4.2vw,3.2rem)]">
+              AI research, built into products.
+            </h2>
+            <div className="mt-6 max-w-[46ch] space-y-4 text-[17px] leading-relaxed text-muted-foreground">
+              <p>
+                Ru'ya is the creative and engineering studio behind Mohammed
+                Sanin's AI research, product experiments, and production-ready
+                systems.
+              </p>
+              <p>
+                From multimodal intelligence and deepfake detection to autonomous
+                traffic analytics, healthcare prediction, and AI-powered
+                productivity software, every project begins with one question:
+              </p>
+              <p className="font-medium text-foreground">
+                How can artificial intelligence solve problems people actually
+                face?
+              </p>
+            </div>
+          </Reveal>
+        </div>
+
+        <Reveal className="mt-[12vh]">
+          <blockquote className="mx-auto max-w-3xl text-center">
+            <p className="display-xl text-[clamp(1.7rem,3.6vw,2.8rem)]">
+              Intelligence should feel invisible.
+              <span className="text-copper-gradient">
+                {" "}
+                The best AI disappears into the experience.
+              </span>
+            </p>
+          </blockquote>
         </Reveal>
-      </div>
       </div>
     </section>
   );
 }
 
+/* --------------------------------------------------------------- Founder */
+
+const timeline = [
+  ["AI Research Intern", "Centre of Excellence in AI, NIT Calicut"],
+  ["Research", "Traffic Intelligence · Computer Vision"],
+  ["Generative AI Engineer", "Multimodal & agentic systems"],
+  ["AI Product Builder", "End-to-end shipped products"],
+  ["Final-year", "Artificial Intelligence & Machine Learning"],
+];
+
+function Founder() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const y = useTransform(scrollYProgress, [0, 1], ["6%", "-6%"]);
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.92, 1, 0.95]);
+
+  return (
+    <section className="relative isolate px-6 py-[14vh]">
+      <Backdrop layers={[{ src: bgLayers1 }, { src: bgLayers2 }]} intensity={0.7} />
+      <div className="mx-auto max-w-6xl">
+        <div ref={ref} className="grid items-center gap-12 md:grid-cols-2">
+          <Reveal>
+            <Kicker>Founder</Kicker>
+            <h2 className="display-xl mt-5 text-[clamp(2rem,4.2vw,3.2rem)]">
+              Mohammed Sanin
+            </h2>
+            <p className="mt-3 text-sm font-medium text-muted-foreground">
+              AI Research Engineer · Founder, Ru'ya Studio
+            </p>
+            <p className="mt-6 max-w-[46ch] text-[17px] leading-relaxed text-muted-foreground">
+              Mohammed Sanin is an AI & Machine Learning Engineer focused on
+              designing intelligent systems that combine research with practical
+              impact. His work spans computer vision, deep learning, multimodal
+              AI, autonomous agents, and full-stack AI products. He has
+              contributed to research initiatives at the Centre of Excellence in
+              Artificial Intelligence, NIT Calicut, while building products that
+              bridge AI innovation with real-world applications.
+            </p>
+          </Reveal>
+
+          <motion.div style={{ y, scale }} className="md:order-first">
+            <ol className="relative space-y-6 border-l border-border pl-7">
+              {timeline.map((t, i) => (
+                <Reveal key={t[0]} delay={i * 0.05}>
+                  <li className="relative">
+                    <span className="absolute -left-[33px] top-2 h-1.5 w-1.5 rounded-full bg-copper" />
+                    <p className="text-[15px] font-semibold">{t[0]}</p>
+                    <p className="mt-1 text-sm text-muted-foreground">{t[1]}</p>
+                  </li>
+                </Reveal>
+              ))}
+            </ol>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------- Expertise */
+
+const expertise = [
+  "Computer Vision",
+  "Deep Learning",
+  "Generative AI",
+  "Large Language Models",
+  "Autonomous AI Agents",
+  "Predictive Analytics",
+  "Multimodal AI",
+  "End-to-End AI Products",
+];
+
+function Expertise() {
+  return (
+    <section className="relative isolate px-6 py-[12vh]">
+      <div className="mx-auto max-w-6xl">
+        <Reveal>
+          <Kicker>Core Expertise</Kicker>
+        </Reveal>
+        <div className="mt-10 grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
+          {expertise.map((e, i) => (
+            <Reveal key={e} delay={i * 0.05} className="bg-background">
+              <div className="h-full px-6 py-8 transition-colors duration-200 hover:bg-surface">
+                <p className="text-[10px] font-semibold tracking-[0.2em] text-muted-foreground">
+                  {String(i + 1).padStart(2, "0")}
+                </p>
+                <p className="mt-3 text-[15px] font-semibold leading-snug">{e}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* --------------------------------------------------------------- Signals */
+
+const signals = [
+  { value: 12, suffix: "+", label: "AI Projects" },
+  { value: 3, suffix: "+", label: "Research & Industry Internships" },
+  { value: 10, suffix: "+", label: "Professional Certifications" },
+  { value: 2, suffix: "", label: "National Hackathon Runner-up Awards" },
+];
+
+function Counter({ value, suffix }: { value: number; suffix: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, amount: 0.6 });
+  const [n, setN] = useState(0);
+
+  useEffect(() => {
+    if (!inView) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setN(value);
+      return;
+    }
+    let raf = 0;
+    const start = performance.now();
+    const tick = (t: number) => {
+      const p = Math.min((t - start) / 900, 1);
+      setN(Math.round(value * (1 - Math.pow(1 - p, 3))));
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [inView, value]);
+
+  return (
+    <span ref={ref}>
+      {n}
+      {suffix}
+    </span>
+  );
+}
+
+function Signals() {
+  return (
+    <section className="relative isolate border-y border-border px-6 py-[12vh]">
+      <div className="mx-auto grid max-w-6xl gap-10 sm:grid-cols-2 lg:grid-cols-4">
+        {signals.map((s, i) => (
+          <Reveal key={s.label} delay={i * 0.06}>
+            <p className="display-xl text-[clamp(2.4rem,5vw,3.6rem)]">
+              <Counter value={s.value} suffix={s.suffix} />
+            </p>
+            <p className="mt-3 max-w-[18ch] text-sm text-muted-foreground">{s.label}</p>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------- Projects */
+
 const projects = [
   {
-    name: "Mirror",
-    line: "Real-time AR try-on for retail floors",
-    detail: "Pose-aware garment fitting at 60fps on commodity hardware.",
+    name: "DeepTrace",
+    line: "AI-powered multimodal deepfake detection platform.",
+    status: "Research Prototype",
+    tags: [
+      "CNN-based audio analysis",
+      "CNN + BiLSTM video detection",
+      "Mel Spectrogram pipeline",
+      "FastAPI backend",
+      "React frontend",
+    ],
   },
   {
-    name: "Fold",
-    line: "Vision pipeline for shelf intelligence",
-    detail: "Detection, tracking and planogram compliance in one pass.",
+    name: "GridPulse",
+    line: "AI Traffic Intelligence Platform.",
+    status: "Research Project",
+    tags: [
+      "Google Maps Traffic Analysis",
+      "Computer Vision",
+      "Congestion Prediction",
+      "Traffic Density Analytics",
+      "AI Decision Support",
+    ],
   },
   {
-    name: "Atlas",
-    line: "Applied ML platform, model to product",
-    detail: "Training, evaluation and on-device inference, shipped together.",
+    name: "Eventia",
+    line: "Agentic AI Event Management Platform.",
+    status: "Hackathon Project",
+    tags: [
+      "Venue Recommendation",
+      "Budget Planning",
+      "Weather Intelligence",
+      "Vertex AI",
+      "Autonomous AI Agents",
+    ],
+  },
+  {
+    name: "ovAI",
+    line: "Women's Health Intelligence Platform.",
+    status: "Product Prototype",
+    tags: [
+      "LSTM Cycle Prediction",
+      "Health Analytics",
+      "React Native",
+      "Personalized AI",
+    ],
   },
 ];
 
 function Projects() {
   return (
-    <section id="work" className="relative isolate px-6 py-[10vh]">
+    <section id="projects" className="relative isolate px-6 py-[14vh]">
       <Backdrop layers={[{ src: bgWork1 }, { src: bgWork2 }]} intensity={0.8} />
       <div className="mx-auto max-w-6xl">
-      <Reveal>
-        <h2 className="display-xl text-[clamp(2.4rem,6vw,5rem)]">
-          Selected <span className="text-copper-gradient">work</span>
-        </h2>
-      </Reveal>
-      <div className="mt-14 space-y-6">
-        {projects.map((p, i) => (
-          <div
-            key={p.name}
-            className="sticky"
-            style={{ top: `calc(18vh + ${i * 22}px)` }}
-          >
-            <Reveal delay={i * 0.05}>
-              <article className="group grid gap-4 rounded-[2rem] border border-border bg-surface p-8 shadow-[var(--shadow-soft)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[var(--shadow-float)] md:grid-cols-[1fr_1.4fr] md:p-12">
-                <h3 className="display-xl text-[clamp(1.8rem,3.4vw,2.8rem)]">{p.name}</h3>
-                <div>
-                  <p className="text-lg font-medium">{p.line}</p>
-                  <p className="mt-2 text-muted-foreground">{p.detail}</p>
-                  <span className="mt-6 inline-block text-sm font-semibold text-copper opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-                    Case study →
-                  </span>
-                </div>
-              </article>
-            </Reveal>
-          </div>
-        ))}
-      </div>
+        <Reveal>
+          <Kicker>Featured Projects</Kicker>
+          <h2 className="display-xl mt-5 text-[clamp(2rem,4.6vw,3.4rem)]">
+            Systems built <span className="text-copper-gradient">end to end</span>.
+          </h2>
+        </Reveal>
+
+        <div className="mt-14 space-y-6">
+          {projects.map((p, i) => (
+            <div key={p.name} className="sticky" style={{ top: `calc(18vh + ${i * 22}px)` }}>
+              <Reveal delay={i * 0.04}>
+                <article className="group grid gap-6 rounded-3xl border border-border bg-surface p-8 shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:border-copper/40 md:grid-cols-[1fr_1.5fr] md:p-12">
+                  <div>
+                    <p className="text-[11px] font-semibold tracking-[0.24em] text-muted-foreground transition-colors duration-200 group-hover:text-copper">
+                      {String(i + 1).padStart(2, "0")}
+                    </p>
+                    <h3 className="display-xl mt-4 text-[clamp(1.8rem,3.2vw,2.6rem)]">
+                      {p.name}
+                    </h3>
+                    <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                      {p.status}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-lg font-medium">{p.line}</p>
+                    <ul className="mt-6 flex flex-wrap gap-2">
+                      {p.tags.map((t) => (
+                        <li
+                          key={t}
+                          className="rounded-lg border border-border px-3 py-1.5 text-[13px] text-muted-foreground"
+                        >
+                          {t}
+                        </li>
+                      ))}
+                    </ul>
+                    <span className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-copper">
+                      View
+                      <span className="transition-transform duration-200 group-hover:translate-x-1.5">
+                        →
+                      </span>
+                    </span>
+                  </div>
+                </article>
+              </Reveal>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
 }
 
-const stack = [
-  "PyTorch",
-  "ONNX",
-  "Three.js",
-  "TypeScript",
-  "Computer Vision",
-  "ARKit",
-  "React",
-  "CUDA",
+/* ------------------------------------------------------------ Also built */
+
+const alsoBuilt = [
+  ["NeuroBlocks", "Visual drag-and-drop machine learning workflow builder."],
+  ["ForecastFusion", "Time-series forecasting platform supporting multiple predictive models."],
+  ["TalkEasy", "AI-assisted language learning platform built during a national hackathon."],
+  [
+    "Traffic Analysis System",
+    "Computer vision system for vehicle counting and congestion estimation using Google Maps imagery.",
+  ],
+  ["Crewly", "Modern AI-powered workflow and task management platform for collaborative teams."],
+  ["Freshness Passport", "AI-powered food freshness and waste management solution for retail."],
+  ["Rumours", "AI platform that aggregates and analyzes football transfer rumours using LLMs."],
+  [
+    "Namma-Raste Health",
+    "Road maintenance reporting platform built with Android and AI-assisted workflows.",
+  ],
 ];
 
-function Stack() {
+function AlsoBuilt() {
   return (
-    <section id="stack" className="relative isolate px-6 py-[14vh]">
-      <Backdrop layers={[{ src: bgStack1 }, { src: bgHero2 }]} intensity={0.35} />
+    <section className="relative isolate px-6 py-[12vh]">
       <div className="mx-auto max-w-6xl">
-      <Reveal>
-        <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-copper">
-          The complete package
-        </p>
-      </Reveal>
-      <div className="mt-8 flex flex-wrap gap-3">
-        {stack.map((s, i) => (
-          <Reveal key={s} delay={i * 0.04}>
-            <span className="rounded-full border border-border px-5 py-2.5 text-sm font-medium transition-colors hover:border-copper hover:text-copper">
-              {s}
-            </span>
-          </Reveal>
-        ))}
-      </div>
+        <Reveal>
+          <Kicker>Also Built</Kicker>
+        </Reveal>
+        <ul className="mt-10 divide-y divide-border border-y border-border">
+          {alsoBuilt.map(([name, line], i) => (
+            <Reveal key={name} delay={Math.min(i, 5) * 0.04}>
+              <li className="grid gap-2 py-6 transition-colors duration-200 hover:text-foreground md:grid-cols-[240px_1fr] md:items-baseline">
+                <p className="text-[15px] font-semibold">{name}</p>
+                <p className="text-[15px] text-muted-foreground">{line}</p>
+              </li>
+            </Reveal>
+          ))}
+        </ul>
       </div>
     </section>
   );
 }
 
-function Closing() {
+/* ----------------------------------------------------- Research + tech */
+
+const interests = [
+  "Computer Vision",
+  "Generative AI",
+  "Deep Learning",
+  "Agentic AI",
+  "Human-AI Interaction",
+  "Predictive Intelligence",
+  "Spatial Computing",
+  "AI for Social Impact",
+];
+
+const technologies = [
+  "Python",
+  "PyTorch",
+  "TensorFlow",
+  "OpenCV",
+  "FastAPI",
+  "React",
+  "TypeScript",
+  "Supabase",
+  "Google Cloud",
+  "Vertex AI",
+  "Docker",
+  "PostgreSQL",
+];
+
+function ResearchAndTech() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const y = useTransform(scrollYProgress, [0, 1], ["4%", "-4%"]);
+
+  return (
+    <section id="research" className="relative isolate px-6 py-[14vh]">
+      <Backdrop layers={[{ src: bgStack1 }, { src: bgHero2 }]} intensity={0.35} />
+      <div ref={ref} className="mx-auto max-w-6xl">
+        <div className="grid gap-16 md:grid-cols-2">
+          <div>
+            <Reveal>
+              <Kicker>Research Interests</Kicker>
+              <h2 className="display-xl mt-5 text-[clamp(1.8rem,3.4vw,2.6rem)]">
+                Where the work is heading.
+              </h2>
+            </Reveal>
+            <div className="mt-8 flex flex-wrap gap-3">
+              {interests.map((s, i) => (
+                <Reveal key={s} delay={i * 0.035}>
+                  <span className="inline-block rounded-xl border border-border px-4 py-2 text-sm font-medium transition-colors duration-200 hover:border-copper hover:text-copper">
+                    {s}
+                  </span>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+
+          <motion.div style={{ y }}>
+            <Reveal>
+              <Kicker>Technologies</Kicker>
+              <h2 className="display-xl mt-5 text-[clamp(1.8rem,3.4vw,2.6rem)]">
+                The working toolkit.
+              </h2>
+            </Reveal>
+            <div className="mt-8 flex flex-wrap gap-3">
+              {technologies.map((s, i) => (
+                <Reveal key={s} delay={i * 0.03}>
+                  <span className="inline-block rounded-xl border border-border px-4 py-2 text-sm font-medium transition-colors duration-200 hover:border-copper hover:text-copper">
+                    {s}
+                  </span>
+                </Reveal>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+
+        <Reveal className="mt-[12vh]">
+          <div className="overflow-hidden rounded-3xl">
+            <img
+              src={layers}
+              alt="Layered translucent glass panes with warm rim light"
+              loading="lazy"
+              width={1600}
+              height={1008}
+              className="w-full"
+            />
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+/* --------------------------------------------------------------- Contact */
+
+const fieldClass =
+  "w-full border-0 border-b border-border bg-transparent px-0 py-3 text-[15px] outline-none transition-colors duration-200 placeholder:text-muted-foreground focus:border-copper";
+
+function Contact() {
+  const [sent, setSent] = useState(false);
+
   return (
     <section
       id="contact"
-      className="veil relative isolate border-t border-border px-6 py-[18vh] text-center"
+      className="veil relative isolate border-t border-border px-6 py-[16vh]"
     >
       <Backdrop layers={[{ src: bgClosing1 }, { src: bgLayers2 }]} intensity={0.7} />
-      <Reveal>
-        <h2 className="display-xl mx-auto max-w-3xl text-[clamp(2.4rem,6vw,5rem)]">
-          Let's build something
-          <span className="text-copper-gradient"> uncommonly good</span>.
-        </h2>
-        <a
-          href="mailto:hello@sanin.dev"
-          className="mt-10 inline-flex rounded-full bg-foreground px-8 py-4 text-sm font-semibold text-background transition-transform hover:scale-[1.03]"
-        >
-          hello@sanin.dev
-        </a>
-        <p className="mt-16 text-xs text-muted-foreground">
-          © {new Date().getFullYear()} Mohammed Sanin
-        </p>
-      </Reveal>
+      <div className="mx-auto max-w-3xl">
+        <Reveal>
+          <h2 className="display-xl text-[clamp(2.2rem,5.4vw,4rem)]">
+            Let's build something{" "}
+            <span className="text-copper-gradient">intelligent</span>.
+          </h2>
+          <p className="mt-6 max-w-[46ch] text-[17px] leading-relaxed text-muted-foreground">
+            Whether you're exploring AI research, building an intelligent
+            product, or looking for technical collaboration, I'd love to hear
+            about it.
+          </p>
+        </Reveal>
+
+        <Reveal delay={0.08}>
+          <form
+            className="mt-14 space-y-8"
+            onSubmit={(e) => {
+              e.preventDefault();
+              setSent(true);
+            }}
+          >
+            <div className="grid gap-8 sm:grid-cols-2">
+              <div>
+                <label htmlFor="name" className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                  Name
+                </label>
+                <input id="name" name="name" required className={fieldClass} placeholder="Your name" />
+              </div>
+              <div>
+                <label htmlFor="email" className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                  Email
+                </label>
+                <input id="email" name="email" type="email" required className={fieldClass} placeholder="you@company.com" />
+              </div>
+            </div>
+            <div>
+              <label htmlFor="message" className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                Message
+              </label>
+              <textarea id="message" name="message" rows={4} required className={`${fieldClass} resize-none`} placeholder="Tell me about the project" />
+            </div>
+            <button
+              type="submit"
+              className="inline-flex rounded-xl bg-foreground px-8 py-4 text-sm font-semibold text-background transition-transform duration-200 hover:scale-[1.02]"
+            >
+              Start the Conversation
+            </button>
+            {sent && (
+              <p role="status" className="text-sm text-copper">
+                Thanks — your message is ready to send. I'll be in touch shortly.
+              </p>
+            )}
+          </form>
+        </Reveal>
+      </div>
     </section>
+  );
+}
+
+/* ---------------------------------------------------------------- Footer */
+
+function Footer() {
+  return (
+    <footer className="border-t border-border px-6 py-16">
+      <div className="mx-auto grid max-w-6xl gap-10 sm:grid-cols-[1fr_auto]">
+        <div>
+          <p className="text-[13px] font-extrabold tracking-tight">
+            Ru'ya Studio<span className="text-copper">.</span>
+          </p>
+          <p className="mt-3 text-sm text-muted-foreground">
+            AI Systems. Designed with Purpose.
+          </p>
+          <p className="mt-6 text-xs text-muted-foreground">
+            © 2026 Mohammed Sanin
+          </p>
+        </div>
+        <div className="text-sm">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+            Research
+          </p>
+          <ul className="mt-4 space-y-2 text-muted-foreground">
+            <li>Computer Vision</li>
+            <li>Generative AI</li>
+            <li>Deep Learning</li>
+          </ul>
+        </div>
+      </div>
+    </footer>
   );
 }
 
 export function Sections() {
   return (
     <>
-      <PinnedVisual
-        id="approach"
-        src={vision}
-        alt="Copper wireframe scanning a sculptural white form"
-        kicker="Approach"
-        title="Systems that see."
-        body="Computer vision models tuned for the messy real world — retail lighting, occlusion, motion — then compressed until they run anywhere."
-        backdrop={[bgApproach1, bgApproach2]}
-      />
+      <Studio />
+      <Founder />
+      <Expertise />
+      <Signals />
       <Projects />
-      <PinnedVisual
-        id="layers"
-        src={layers}
-        alt="Layered translucent glass panes with copper rim light"
-        kicker="End to end"
-        title="Model, product, polish."
-        body="Research isn't the finish line. Every layer — data, inference, interface — is designed as one continuous product."
-        flip
-        backdrop={[bgLayers1, bgLayers2]}
-      />
-      <Stack />
-      <Closing />
+      <AlsoBuilt />
+      <ResearchAndTech />
+      <Contact />
+      <Footer />
     </>
   );
 }
