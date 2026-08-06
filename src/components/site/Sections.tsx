@@ -229,11 +229,12 @@ const signals = [
 function Counter({ value, suffix }: { value: number; suffix: string }) {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.6 });
+  const { choreography } = useMotionProfile();
   const [n, setN] = useState(0);
 
   useEffect(() => {
     if (!inView) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (!choreography) {
       setN(value);
       return;
     }
@@ -246,7 +247,7 @@ function Counter({ value, suffix }: { value: number; suffix: string }) {
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [inView, value]);
+  }, [inView, value, choreography]);
 
   return (
     <span ref={ref}>
