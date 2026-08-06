@@ -33,7 +33,6 @@ export function Backdrop({
   const o = useTransform(smooth, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
 
   const ys = [y0, y1, y2];
-  const opacities = [0.16, 0.1, 0.07];
 
   return (
     <div
@@ -52,7 +51,7 @@ export function Backdrop({
           width={1920}
           height={1200}
           style={{
-            y: ys[i],
+            y: ys[i] ?? y0,
             scale: i === 0 ? s0 : 1.1,
             opacity: o,
           }}
