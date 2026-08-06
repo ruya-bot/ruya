@@ -141,7 +141,7 @@ const stack = [
 function Stack() {
   return (
     <section id="stack" className="relative isolate px-6 py-[14vh]">
-      <Backdrop layers={[{ src: bgStack1 }, { src: bgHero2 }]} intensity={0.55} />
+      <Backdrop layers={[{ src: bgStack1 }, { src: bgHero2 }]} intensity={0.35} />
       <div className="mx-auto max-w-6xl">
       <Reveal>
         <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-copper">
