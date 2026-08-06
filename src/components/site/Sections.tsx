@@ -1,7 +1,15 @@
 import { useEffect, useRef, useState } from "react";
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import {
+  motion,
+  useInView,
+  useScroll,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 import { Reveal } from "./Reveal";
 import { Backdrop } from "./Backdrop";
+import { EASE, SCROLL_SPRING } from "@/lib/motion";
+import { useMotionProfile } from "@/hooks/useMotionProfile";
 import vision from "@/assets/vision.jpg";
 import layers from "@/assets/layers.jpg";
 import bgApproach1 from "@/assets/bg-approach-1.jpg";
@@ -19,6 +27,27 @@ function Kicker({ children }: { children: React.ReactNode }) {
     <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-copper">
       {children}
     </p>
+  );
+}
+
+/**
+ * Hairline that draws itself as one section hands off to the next.
+ * Gives the page a continuous rhythm instead of hard section edges.
+ */
+function SectionSeam() {
+  const { choreography } = useMotionProfile();
+  if (!choreography) {
+    return <div aria-hidden className="mx-auto h-px max-w-6xl bg-border" />;
+  }
+  return (
+    <motion.div
+      aria-hidden
+      initial={{ scaleX: 0, opacity: 0 }}
+      whileInView={{ scaleX: 1, opacity: 1 }}
+      viewport={{ once: true, amount: 0.8 }}
+      transition={{ duration: 1.1, ease: EASE.outExpo }}
+      className="mx-auto h-px max-w-6xl origin-center bg-gradient-to-r from-transparent via-border to-transparent"
+    />
   );
 }
 
