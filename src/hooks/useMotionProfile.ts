@@ -9,6 +9,8 @@ export type MotionProfile = {
   parallax: boolean;
   /** Safe to run entrance choreography (stagger, blur, translate). */
   choreography: boolean;
+  /** Small / touch-first viewport. */
+  compact: boolean;
   /** Resolved once on the client — false during SSR/first paint. */
   ready: boolean;
 };
@@ -18,6 +20,7 @@ const SSR_PROFILE: MotionProfile = {
   lowPower: false,
   parallax: false,
   choreography: true,
+  compact: false,
   ready: false,
 };
 
@@ -30,13 +33,16 @@ function detectLowPower(): boolean {
   const cores = nav.hardwareConcurrency ?? 8;
   const memory = nav.deviceMemory ?? 8;
   const saveData = nav.connection?.saveData === true;
-  const slowNet = /2g/.test(nav.connection?.effectiveType ?? "");
-  const coarse =
-    typeof window !== "undefined" &&
-    window.matchMedia("(pointer: coarse)").matches &&
-    window.innerWidth < 768;
+  const slowNet = /(^|[^4])2g/.test(nav.connection?.effectiveType ?? "");
 
-  return cores <= 4 || memory <= 4 || saveData || slowNet || coarse;
+  // Modern phones handle spring parallax fine — only bail on genuinely weak
+  // hardware or constrained networks.
+  return (cores <= 4 && memory <= 4) || saveData || slowNet;
+}
+
+function detectCompact(): boolean {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia("(max-width: 767px)").matches;
 }
 
 /**
@@ -61,13 +67,18 @@ export function useMotionProfile(): MotionProfile {
         lowPower,
         parallax: !reducedMotion && !lowPower,
         choreography: !reducedMotion,
+        compact: detectCompact(),
         ready: true,
       });
     };
 
     resolve();
     mq.addEventListener("change", resolve);
-    return () => mq.removeEventListener("change", resolve);
+    window.addEventListener("resize", resolve);
+    return () => {
+      mq.removeEventListener("change", resolve);
+      window.removeEventListener("resize", resolve);
+    };
   }, []);
 
   return profile;

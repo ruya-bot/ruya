@@ -55,20 +55,20 @@ function SectionSeam() {
 
 function Studio() {
   const ref = useRef<HTMLDivElement>(null);
-  const { parallax } = useMotionProfile();
+  const { parallax, compact } = useMotionProfile();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const smooth = useSpring(scrollYProgress, SCROLL_SPRING.base);
-  const scale = useTransform(smooth, [0, 0.5, 1], [0.92, 1, 0.95]);
-  const y = useTransform(smooth, [0, 1], ["5%", "-5%"]);
+  const scale = useTransform(smooth, [0, 0.5, 1], compact ? [0.97, 1, 0.99] : [0.92, 1, 0.95]);
+  const y = useTransform(smooth, [0, 1], compact ? ["2%", "-2%"] : ["5%", "-5%"]);
 
   return (
-    <section id="about" className="relative isolate px-6 py-[14vh]">
+    <section id="about" className="relative isolate px-5 py-[10vh] sm:px-6 md:py-[14vh]">
       <Backdrop layers={[{ src: bgApproach1 }, { src: bgApproach2 }]} intensity={0.9} />
       <div className="mx-auto max-w-6xl">
-        <div ref={ref} className="grid items-center gap-12 md:grid-cols-2">
+        <div ref={ref} className="grid items-center gap-10 md:grid-cols-2 md:gap-12">
           <motion.div
             style={parallax ? { scale, y } : {}}
-            className="overflow-hidden rounded-3xl"
+            className="overflow-hidden rounded-2xl md:rounded-3xl"
           >
             <img
               src={vision}
@@ -81,10 +81,10 @@ function Studio() {
           </motion.div>
           <Reveal>
             <Kicker>Studio Thesis</Kicker>
-            <h2 className="display-xl mt-5 text-[clamp(2rem,4.2vw,3.2rem)]">
+            <h2 className="display-xl mt-4 text-balance text-[clamp(1.85rem,7vw,3.2rem)] sm:mt-5 md:text-[clamp(2rem,4.2vw,3.2rem)]">
               AI research, built into products.
             </h2>
-            <div className="mt-6 max-w-[46ch] space-y-4 text-[17px] leading-relaxed text-muted-foreground">
+            <div className="mt-5 max-w-[46ch] space-y-4 text-[15px] leading-relaxed text-muted-foreground sm:mt-6 sm:text-[17px]">
               <p>
                 Ru'ya is the creative and engineering studio behind Mohammed
                 Sanin's AI research, product experiments, and production-ready
@@ -103,9 +103,9 @@ function Studio() {
           </Reveal>
         </div>
 
-        <Reveal className="mt-[12vh]">
+        <Reveal className="mt-[9vh] md:mt-[12vh]">
           <blockquote className="mx-auto max-w-3xl text-center">
-            <p className="display-xl text-[clamp(1.7rem,3.6vw,2.8rem)]">
+            <p className="display-xl text-balance text-[clamp(1.5rem,6vw,2.8rem)] md:text-[clamp(1.7rem,3.6vw,2.8rem)]">
               Intelligence should feel invisible.
               <span className="text-copper-gradient">
                 {" "}
@@ -131,26 +131,26 @@ const timeline = [
 
 function Founder() {
   const ref = useRef<HTMLDivElement>(null);
-  const { parallax } = useMotionProfile();
+  const { parallax, compact } = useMotionProfile();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const smooth = useSpring(scrollYProgress, SCROLL_SPRING.base);
-  const y = useTransform(smooth, [0, 1], ["5%", "-5%"]);
-  const scale = useTransform(smooth, [0, 0.5, 1], [0.94, 1, 0.97]);
+  const y = useTransform(smooth, [0, 1], compact ? ["2%", "-2%"] : ["5%", "-5%"]);
+  const scale = useTransform(smooth, [0, 0.5, 1], compact ? [0.98, 1, 0.99] : [0.94, 1, 0.97]);
 
   return (
-    <section className="relative isolate px-6 py-[14vh]">
+    <section className="relative isolate px-5 py-[10vh] sm:px-6 md:py-[14vh]">
       <Backdrop layers={[{ src: bgLayers1 }, { src: bgLayers2 }]} intensity={0.7} />
       <div className="mx-auto max-w-6xl">
-        <div ref={ref} className="grid items-center gap-12 md:grid-cols-2">
+        <div ref={ref} className="grid items-center gap-10 md:grid-cols-2 md:gap-12">
           <Reveal>
             <Kicker>Founder</Kicker>
-            <h2 className="display-xl mt-5 text-[clamp(2rem,4.2vw,3.2rem)]">
+            <h2 className="display-xl mt-4 text-[clamp(1.85rem,7vw,3.2rem)] sm:mt-5 md:text-[clamp(2rem,4.2vw,3.2rem)]">
               Mohammed Sanin
             </h2>
             <p className="mt-3 text-sm font-medium text-muted-foreground">
               AI Research Engineer · Founder, Ru'ya Studio
             </p>
-            <p className="mt-6 max-w-[46ch] text-[17px] leading-relaxed text-muted-foreground">
+            <p className="mt-5 max-w-[46ch] text-[15px] leading-relaxed text-muted-foreground sm:mt-6 sm:text-[17px]">
               Mohammed Sanin is an AI & Machine Learning Engineer focused on
               designing intelligent systems that combine research with practical
               impact. His work spans computer vision, deep learning, multimodal
@@ -195,19 +195,19 @@ const expertise = [
 
 function Expertise() {
   return (
-    <section className="relative isolate px-6 py-[12vh]">
+    <section className="relative isolate px-5 py-[9vh] sm:px-6 md:py-[12vh]">
       <div className="mx-auto max-w-6xl">
         <Reveal>
           <Kicker>Core Expertise</Kicker>
         </Reveal>
-        <div className="mt-10 grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-8 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border bg-border sm:mt-10 lg:grid-cols-4">
           {expertise.map((e, i) => (
             <Reveal key={e} delay={i * 0.05} className="bg-background">
-              <div className="h-full px-6 py-8 transition-colors duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-surface">
+              <div className="h-full px-4 py-6 transition-colors duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-surface sm:px-6 sm:py-8">
                 <p className="text-[10px] font-semibold tracking-[0.2em] text-muted-foreground">
                   {String(i + 1).padStart(2, "0")}
                 </p>
-                <p className="mt-3 text-[15px] font-semibold leading-snug">{e}</p>
+                <p className="mt-3 text-[14px] font-semibold leading-snug sm:text-[15px]">{e}</p>
               </div>
             </Reveal>
           ))}
@@ -259,14 +259,14 @@ function Counter({ value, suffix }: { value: number; suffix: string }) {
 
 function Signals() {
   return (
-    <section className="relative isolate border-y border-border px-6 py-[12vh]">
-      <div className="mx-auto grid max-w-6xl gap-10 sm:grid-cols-2 lg:grid-cols-4">
+    <section className="relative isolate border-y border-border px-5 py-[9vh] sm:px-6 md:py-[12vh]">
+      <div className="mx-auto grid max-w-6xl grid-cols-2 gap-8 sm:gap-10 lg:grid-cols-4">
         {signals.map((s, i) => (
           <Reveal key={s.label} delay={i * 0.06}>
-            <p className="display-xl text-[clamp(2.4rem,5vw,3.6rem)]">
+            <p className="display-xl text-[clamp(2rem,9vw,3.6rem)] md:text-[clamp(2.4rem,5vw,3.6rem)]">
               <Counter value={s.value} suffix={s.suffix} />
             </p>
-            <p className="mt-3 max-w-[18ch] text-sm text-muted-foreground">{s.label}</p>
+            <p className="mt-3 max-w-[18ch] text-[13px] text-muted-foreground sm:text-sm">{s.label}</p>
           </Reveal>
         ))}
       </div>
@@ -334,47 +334,51 @@ function ProjectCard({
   i: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const { parallax } = useMotionProfile();
+  const { parallax, compact } = useMotionProfile();
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start center", "end start"],
   });
   const smooth = useSpring(scrollYProgress, SCROLL_SPRING.base);
   // Outgoing card recedes slightly as the next one slides over it.
-  const scale = useTransform(smooth, [0, 1], [1, 0.96]);
-  const opacity = useTransform(smooth, [0, 0.85, 1], [1, 1, 0.55]);
+  const scale = useTransform(smooth, [0, 1], [1, compact ? 0.98 : 0.96]);
+  const opacity = useTransform(smooth, [0, 0.85, 1], [1, 1, compact ? 0.75 : 0.55]);
 
   return (
-    <div ref={ref} className="sticky" style={{ top: `calc(18vh + ${i * 22}px)` }}>
+    <div
+      ref={ref}
+      className="md:sticky"
+      style={{ top: `calc(14vh + ${i * 18}px)` }}
+    >
       <Reveal delay={i * 0.04}>
         <motion.article
           style={parallax ? { scale, opacity } : {}}
-          className="group grid gap-6 rounded-3xl border border-border bg-surface p-8 shadow-[var(--shadow-soft)] transition-[transform,border-color,box-shadow] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:border-copper/40 hover:shadow-[var(--shadow-float)] md:grid-cols-[1fr_1.5fr] md:p-12"
+          className="group grid gap-5 rounded-2xl border border-border bg-surface p-6 shadow-[var(--shadow-soft)] transition-[transform,border-color,box-shadow] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:border-copper/40 hover:shadow-[var(--shadow-float)] sm:p-8 md:grid-cols-[1fr_1.5fr] md:gap-6 md:rounded-3xl md:p-12"
         >
           <div>
             <p className="text-[11px] font-semibold tracking-[0.24em] text-muted-foreground transition-colors duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:text-copper">
               {String(i + 1).padStart(2, "0")}
             </p>
-            <h3 className="display-xl mt-4 text-[clamp(1.8rem,3.2vw,2.6rem)] transition-colors duration-300 delay-75 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:text-copper">
+            <h3 className="display-xl mt-3 text-[clamp(1.6rem,7vw,2.6rem)] transition-colors duration-300 delay-75 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:text-copper sm:mt-4 md:text-[clamp(1.8rem,3.2vw,2.6rem)]">
               {p.name}
             </h3>
-            <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+            <p className="mt-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground sm:mt-4 sm:text-[11px]">
               {p.status}
             </p>
           </div>
           <div>
-            <p className="text-lg font-medium">{p.line}</p>
-            <ul className="mt-6 flex flex-wrap gap-2">
+            <p className="text-[16px] font-medium sm:text-lg">{p.line}</p>
+            <ul className="mt-5 flex flex-wrap gap-2 sm:mt-6">
               {p.tags.map((t) => (
                 <li
                   key={t}
-                  className="rounded-lg border border-border px-3 py-1.5 text-[13px] text-muted-foreground transition-colors duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-copper/50 hover:text-foreground"
+                  className="rounded-lg border border-border px-2.5 py-1.5 text-[12px] text-muted-foreground transition-colors duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-copper/50 hover:text-foreground sm:px-3 sm:text-[13px]"
                 >
                   {t}
                 </li>
               ))}
             </ul>
-            <span className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-copper">
+            <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-copper sm:mt-8">
               View
               <span className="transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1.5">
                 →
@@ -389,17 +393,17 @@ function ProjectCard({
 
 function Projects() {
   return (
-    <section id="projects" className="relative isolate px-6 py-[14vh]">
+    <section id="projects" className="relative isolate px-5 py-[10vh] sm:px-6 md:py-[14vh]">
       <Backdrop layers={[{ src: bgWork1 }, { src: bgWork2 }]} intensity={0.8} />
       <div className="mx-auto max-w-6xl">
         <Reveal>
           <Kicker>Featured Projects</Kicker>
-          <h2 className="display-xl mt-5 text-[clamp(2rem,4.6vw,3.4rem)]">
+          <h2 className="display-xl mt-4 text-balance text-[clamp(1.85rem,7.4vw,3.4rem)] sm:mt-5 md:text-[clamp(2rem,4.6vw,3.4rem)]">
             Systems built <span className="text-copper-gradient">end to end</span>.
           </h2>
         </Reveal>
 
-        <div className="mt-14 space-y-6">
+        <div className="mt-10 space-y-5 sm:mt-14 sm:space-y-6">
           {projects.map((p, i) => (
             <ProjectCard key={p.name} p={p} i={i} />
           ))}
@@ -430,17 +434,17 @@ const alsoBuilt = [
 
 function AlsoBuilt() {
   return (
-    <section className="relative isolate px-6 py-[12vh]">
+    <section className="relative isolate px-5 py-[9vh] sm:px-6 md:py-[12vh]">
       <div className="mx-auto max-w-6xl">
         <Reveal>
           <Kicker>Also Built</Kicker>
         </Reveal>
-        <ul className="mt-10 divide-y divide-border border-y border-border">
+        <ul className="mt-8 divide-y divide-border border-y border-border sm:mt-10">
           {alsoBuilt.map(([name, line], i) => (
             <Reveal key={name} delay={Math.min(i, 5) * 0.04}>
-              <li className="grid gap-2 py-6 transition-colors duration-200 hover:text-foreground md:grid-cols-[240px_1fr] md:items-baseline">
+              <li className="grid gap-1.5 py-5 transition-colors duration-200 hover:text-foreground sm:py-6 md:grid-cols-[240px_1fr] md:items-baseline md:gap-2">
                 <p className="text-[15px] font-semibold">{name}</p>
-                <p className="text-[15px] text-muted-foreground">{line}</p>
+                <p className="text-[14px] text-muted-foreground sm:text-[15px]">{line}</p>
               </li>
             </Reveal>
           ))}
@@ -480,27 +484,27 @@ const technologies = [
 
 function ResearchAndTech() {
   const ref = useRef<HTMLDivElement>(null);
-  const { parallax } = useMotionProfile();
+  const { parallax, compact } = useMotionProfile();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const smooth = useSpring(scrollYProgress, SCROLL_SPRING.light);
-  const y = useTransform(smooth, [0, 1], ["4%", "-4%"]);
+  const y = useTransform(smooth, [0, 1], compact ? ["1.5%", "-1.5%"] : ["4%", "-4%"]);
 
   return (
-    <section id="research" className="relative isolate px-6 py-[14vh]">
+    <section id="research" className="relative isolate px-5 py-[10vh] sm:px-6 md:py-[14vh]">
       <Backdrop layers={[{ src: bgStack1 }, { src: bgHero2 }]} intensity={0.35} />
       <div ref={ref} className="mx-auto max-w-6xl">
-        <div className="grid gap-16 md:grid-cols-2">
+        <div className="grid gap-12 md:grid-cols-2 md:gap-16">
           <div>
             <Reveal>
               <Kicker>Research Interests</Kicker>
-              <h2 className="display-xl mt-5 text-[clamp(1.8rem,3.4vw,2.6rem)]">
+              <h2 className="display-xl mt-4 text-[clamp(1.7rem,6.6vw,2.6rem)] sm:mt-5 md:text-[clamp(1.8rem,3.4vw,2.6rem)]">
                 Where the work is heading.
               </h2>
             </Reveal>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-6 flex flex-wrap gap-2.5 sm:mt-8 sm:gap-3">
               {interests.map((s, i) => (
                 <Reveal key={s} delay={i * 0.035}>
-                  <span className="inline-block rounded-xl border border-border px-4 py-2 text-sm font-medium transition-[color,border-color,transform] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:border-copper hover:text-copper">
+                  <span className="inline-block rounded-xl border border-border px-3.5 py-2 text-[13px] font-medium transition-[color,border-color,transform] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:border-copper hover:text-copper sm:px-4 sm:text-sm">
                     {s}
                   </span>
                 </Reveal>
@@ -511,14 +515,14 @@ function ResearchAndTech() {
           <motion.div style={parallax ? { y } : {}}>
             <Reveal>
               <Kicker>Technologies</Kicker>
-              <h2 className="display-xl mt-5 text-[clamp(1.8rem,3.4vw,2.6rem)]">
+              <h2 className="display-xl mt-4 text-[clamp(1.7rem,6.6vw,2.6rem)] sm:mt-5 md:text-[clamp(1.8rem,3.4vw,2.6rem)]">
                 The working toolkit.
               </h2>
             </Reveal>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-6 flex flex-wrap gap-2.5 sm:mt-8 sm:gap-3">
               {technologies.map((s, i) => (
                 <Reveal key={s} delay={i * 0.03}>
-                  <span className="inline-block rounded-xl border border-border px-4 py-2 text-sm font-medium transition-[color,border-color,transform] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:border-copper hover:text-copper">
+                  <span className="inline-block rounded-xl border border-border px-3.5 py-2 text-[13px] font-medium transition-[color,border-color,transform] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:border-copper hover:text-copper sm:px-4 sm:text-sm">
                     {s}
                   </span>
                 </Reveal>
@@ -527,8 +531,8 @@ function ResearchAndTech() {
           </motion.div>
         </div>
 
-        <Reveal className="mt-[12vh]">
-          <div className="overflow-hidden rounded-3xl">
+        <Reveal className="mt-[9vh] md:mt-[12vh]">
+          <div className="overflow-hidden rounded-2xl md:rounded-3xl">
             <img
               src={layers}
               alt="Layered translucent glass panes with warm rim light"
@@ -555,16 +559,16 @@ function Contact() {
   return (
     <section
       id="contact"
-      className="veil relative isolate border-t border-border px-6 py-[16vh]"
+      className="veil relative isolate border-t border-border px-5 py-[11vh] sm:px-6 md:py-[16vh]"
     >
       <Backdrop layers={[{ src: bgClosing1 }, { src: bgLayers2 }]} intensity={0.7} />
       <div className="mx-auto max-w-3xl">
         <Reveal>
-          <h2 className="display-xl text-[clamp(2.2rem,5.4vw,4rem)]">
+          <h2 className="display-xl text-balance text-[clamp(2rem,8.6vw,4rem)] md:text-[clamp(2.2rem,5.4vw,4rem)]">
             Let's build something{" "}
             <span className="text-copper-gradient">intelligent</span>.
           </h2>
-          <p className="mt-6 max-w-[46ch] text-[17px] leading-relaxed text-muted-foreground">
+          <p className="mt-5 max-w-[46ch] text-[15px] leading-relaxed text-muted-foreground sm:mt-6 sm:text-[17px]">
             Whether you're exploring AI research, building an intelligent
             product, or looking for technical collaboration, I'd love to hear
             about it.
@@ -573,13 +577,13 @@ function Contact() {
 
         <Reveal delay={0.08}>
           <form
-            className="mt-14 space-y-8"
+            className="mt-10 space-y-7 sm:mt-14 sm:space-y-8"
             onSubmit={(e) => {
               e.preventDefault();
               setSent(true);
             }}
           >
-            <div className="grid gap-8 sm:grid-cols-2">
+            <div className="grid gap-7 sm:grid-cols-2 sm:gap-8">
               <div>
                 <label htmlFor="name" className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                   Name
@@ -601,7 +605,7 @@ function Contact() {
             </div>
             <button
               type="submit"
-              className="inline-flex rounded-xl bg-foreground px-8 py-4 text-sm font-semibold text-background transition-transform duration-200 hover:scale-[1.02]"
+              className="inline-flex w-full justify-center rounded-xl bg-foreground px-8 py-4 text-sm font-semibold text-background transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98] sm:w-auto"
             >
               Start the Conversation
             </button>
@@ -621,8 +625,8 @@ function Contact() {
 
 function Footer() {
   return (
-    <footer className="border-t border-border px-6 py-16">
-      <div className="mx-auto grid max-w-6xl gap-10 sm:grid-cols-[1fr_auto]">
+    <footer className="border-t border-border px-5 py-12 sm:px-6 sm:py-16">
+      <div className="mx-auto grid max-w-6xl gap-8 sm:grid-cols-[1fr_auto] sm:gap-10">
         <div>
           <p className="text-[13px] font-extrabold tracking-tight">
             Ru'ya Studio<span className="text-copper">.</span>

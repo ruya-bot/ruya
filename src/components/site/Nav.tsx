@@ -1,5 +1,6 @@
-import { motion, useScroll, useSpring, useTransform } from "framer-motion";
-import { SCROLL_SPRING } from "@/lib/motion";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion, useScroll, useSpring, useTransform } from "framer-motion";
+import { EASE, SCROLL_SPRING } from "@/lib/motion";
 import { useMotionProfile } from "@/hooks/useMotionProfile";
 
 const links = [
@@ -12,6 +13,14 @@ const links = [
 export function Nav() {
   const { choreography } = useMotionProfile();
   const { scrollY, scrollYProgress } = useScroll();
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
 
   const blur = useTransform(scrollY, [0, 120], [0, 18]);
   const bg = useTransform(scrollY, [0, 120], [0, 0.72]);
@@ -25,9 +34,10 @@ export function Nav() {
       style={{ backdropFilter, backgroundColor, borderColor }}
       className="fixed inset-x-0 top-0 z-50 border-b border-transparent"
     >
-      <nav className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
+      <nav className="mx-auto flex h-14 max-w-6xl items-center justify-between px-5 sm:px-6">
         <a
           href="#top"
+          onClick={() => setOpen(false)}
           className="rounded-sm text-[13px] font-extrabold tracking-tight transition-opacity duration-200 hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-copper"
         >
           Ru'ya<span className="text-copper">.</span>
@@ -44,7 +54,61 @@ export function Nav() {
             </li>
           ))}
         </ul>
+
+        <button
+          type="button"
+          aria-label={open ? "Close menu" : "Open menu"}
+          aria-expanded={open}
+          onClick={() => setOpen((v) => !v)}
+          className="-mr-2 grid h-10 w-10 shrink-0 place-items-center rounded-xl transition-colors duration-200 active:bg-surface sm:hidden"
+        >
+          <span className="relative block h-3 w-5">
+            <motion.span
+              animate={open ? { rotate: 45, y: 5 } : { rotate: 0, y: 0 }}
+              transition={{ duration: 0.32, ease: EASE.inOutQuart }}
+              className="absolute left-0 top-0 block h-px w-5 bg-foreground"
+            />
+            <motion.span
+              animate={open ? { rotate: -45, y: -5 } : { rotate: 0, y: 0 }}
+              transition={{ duration: 0.32, ease: EASE.inOutQuart }}
+              className="absolute bottom-0 left-0 block h-px w-5 bg-foreground"
+            />
+          </span>
+        </button>
       </nav>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            key="mobile-menu"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.42, ease: EASE.outExpo }}
+            className="overflow-hidden border-t border-border bg-background shadow-[var(--shadow-soft)] sm:hidden"
+          >
+            <ul className="px-5 py-4">
+              {links.map((l, i) => (
+                <motion.li
+                  key={l.label}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.06 + i * 0.05, duration: 0.5, ease: EASE.outExpo }}
+                >
+                  <a
+                    href={l.href}
+                    onClick={() => setOpen(false)}
+                    className="block border-b border-border/60 py-4 text-[17px] font-semibold tracking-tight last:border-0"
+                  >
+                    {l.label}
+                  </a>
+                </motion.li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {choreography && (
         <motion.div
           aria-hidden
