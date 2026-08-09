@@ -434,17 +434,17 @@ const alsoBuilt = [
 
 function AlsoBuilt() {
   return (
-    <section className="relative isolate px-6 py-[12vh]">
+    <section className="relative isolate px-5 py-[9vh] sm:px-6 md:py-[12vh]">
       <div className="mx-auto max-w-6xl">
         <Reveal>
           <Kicker>Also Built</Kicker>
         </Reveal>
-        <ul className="mt-10 divide-y divide-border border-y border-border">
+        <ul className="mt-8 divide-y divide-border border-y border-border sm:mt-10">
           {alsoBuilt.map(([name, line], i) => (
             <Reveal key={name} delay={Math.min(i, 5) * 0.04}>
-              <li className="grid gap-2 py-6 transition-colors duration-200 hover:text-foreground md:grid-cols-[240px_1fr] md:items-baseline">
+              <li className="grid gap-1.5 py-5 transition-colors duration-200 hover:text-foreground sm:py-6 md:grid-cols-[240px_1fr] md:items-baseline md:gap-2">
                 <p className="text-[15px] font-semibold">{name}</p>
-                <p className="text-[15px] text-muted-foreground">{line}</p>
+                <p className="text-[14px] text-muted-foreground sm:text-[15px]">{line}</p>
               </li>
             </Reveal>
           ))}
@@ -484,27 +484,27 @@ const technologies = [
 
 function ResearchAndTech() {
   const ref = useRef<HTMLDivElement>(null);
-  const { parallax } = useMotionProfile();
+  const { parallax, compact } = useMotionProfile();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const smooth = useSpring(scrollYProgress, SCROLL_SPRING.light);
-  const y = useTransform(smooth, [0, 1], ["4%", "-4%"]);
+  const y = useTransform(smooth, [0, 1], compact ? ["1.5%", "-1.5%"] : ["4%", "-4%"]);
 
   return (
-    <section id="research" className="relative isolate px-6 py-[14vh]">
+    <section id="research" className="relative isolate px-5 py-[10vh] sm:px-6 md:py-[14vh]">
       <Backdrop layers={[{ src: bgStack1 }, { src: bgHero2 }]} intensity={0.35} />
       <div ref={ref} className="mx-auto max-w-6xl">
-        <div className="grid gap-16 md:grid-cols-2">
+        <div className="grid gap-12 md:grid-cols-2 md:gap-16">
           <div>
             <Reveal>
               <Kicker>Research Interests</Kicker>
-              <h2 className="display-xl mt-5 text-[clamp(1.8rem,3.4vw,2.6rem)]">
+              <h2 className="display-xl mt-4 text-[clamp(1.7rem,6.6vw,2.6rem)] sm:mt-5 md:text-[clamp(1.8rem,3.4vw,2.6rem)]">
                 Where the work is heading.
               </h2>
             </Reveal>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-6 flex flex-wrap gap-2.5 sm:mt-8 sm:gap-3">
               {interests.map((s, i) => (
                 <Reveal key={s} delay={i * 0.035}>
-                  <span className="inline-block rounded-xl border border-border px-4 py-2 text-sm font-medium transition-[color,border-color,transform] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:border-copper hover:text-copper">
+                  <span className="inline-block rounded-xl border border-border px-3.5 py-2 text-[13px] font-medium transition-[color,border-color,transform] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:border-copper hover:text-copper sm:px-4 sm:text-sm">
                     {s}
                   </span>
                 </Reveal>
@@ -515,14 +515,14 @@ function ResearchAndTech() {
           <motion.div style={parallax ? { y } : {}}>
             <Reveal>
               <Kicker>Technologies</Kicker>
-              <h2 className="display-xl mt-5 text-[clamp(1.8rem,3.4vw,2.6rem)]">
+              <h2 className="display-xl mt-4 text-[clamp(1.7rem,6.6vw,2.6rem)] sm:mt-5 md:text-[clamp(1.8rem,3.4vw,2.6rem)]">
                 The working toolkit.
               </h2>
             </Reveal>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-6 flex flex-wrap gap-2.5 sm:mt-8 sm:gap-3">
               {technologies.map((s, i) => (
                 <Reveal key={s} delay={i * 0.03}>
-                  <span className="inline-block rounded-xl border border-border px-4 py-2 text-sm font-medium transition-[color,border-color,transform] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:border-copper hover:text-copper">
+                  <span className="inline-block rounded-xl border border-border px-3.5 py-2 text-[13px] font-medium transition-[color,border-color,transform] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:border-copper hover:text-copper sm:px-4 sm:text-sm">
                     {s}
                   </span>
                 </Reveal>
@@ -531,8 +531,8 @@ function ResearchAndTech() {
           </motion.div>
         </div>
 
-        <Reveal className="mt-[12vh]">
-          <div className="overflow-hidden rounded-3xl">
+        <Reveal className="mt-[9vh] md:mt-[12vh]">
+          <div className="overflow-hidden rounded-2xl md:rounded-3xl">
             <img
               src={layers}
               alt="Layered translucent glass panes with warm rim light"
@@ -559,16 +559,16 @@ function Contact() {
   return (
     <section
       id="contact"
-      className="veil relative isolate border-t border-border px-6 py-[16vh]"
+      className="veil relative isolate border-t border-border px-5 py-[11vh] sm:px-6 md:py-[16vh]"
     >
       <Backdrop layers={[{ src: bgClosing1 }, { src: bgLayers2 }]} intensity={0.7} />
       <div className="mx-auto max-w-3xl">
         <Reveal>
-          <h2 className="display-xl text-[clamp(2.2rem,5.4vw,4rem)]">
+          <h2 className="display-xl text-balance text-[clamp(2rem,8.6vw,4rem)] md:text-[clamp(2.2rem,5.4vw,4rem)]">
             Let's build something{" "}
             <span className="text-copper-gradient">intelligent</span>.
           </h2>
-          <p className="mt-6 max-w-[46ch] text-[17px] leading-relaxed text-muted-foreground">
+          <p className="mt-5 max-w-[46ch] text-[15px] leading-relaxed text-muted-foreground sm:mt-6 sm:text-[17px]">
             Whether you're exploring AI research, building an intelligent
             product, or looking for technical collaboration, I'd love to hear
             about it.
@@ -577,13 +577,13 @@ function Contact() {
 
         <Reveal delay={0.08}>
           <form
-            className="mt-14 space-y-8"
+            className="mt-10 space-y-7 sm:mt-14 sm:space-y-8"
             onSubmit={(e) => {
               e.preventDefault();
               setSent(true);
             }}
           >
-            <div className="grid gap-8 sm:grid-cols-2">
+            <div className="grid gap-7 sm:grid-cols-2 sm:gap-8">
               <div>
                 <label htmlFor="name" className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                   Name
@@ -605,7 +605,7 @@ function Contact() {
             </div>
             <button
               type="submit"
-              className="inline-flex rounded-xl bg-foreground px-8 py-4 text-sm font-semibold text-background transition-transform duration-200 hover:scale-[1.02]"
+              className="inline-flex w-full justify-center rounded-xl bg-foreground px-8 py-4 text-sm font-semibold text-background transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98] sm:w-auto"
             >
               Start the Conversation
             </button>
@@ -625,8 +625,8 @@ function Contact() {
 
 function Footer() {
   return (
-    <footer className="border-t border-border px-6 py-16">
-      <div className="mx-auto grid max-w-6xl gap-10 sm:grid-cols-[1fr_auto]">
+    <footer className="border-t border-border px-5 py-12 sm:px-6 sm:py-16">
+      <div className="mx-auto grid max-w-6xl gap-8 sm:grid-cols-[1fr_auto] sm:gap-10">
         <div>
           <p className="text-[13px] font-extrabold tracking-tight">
             Ru'ya Studio<span className="text-copper">.</span>
