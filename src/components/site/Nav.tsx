@@ -85,7 +85,7 @@ export function Nav() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.42, ease: EASE.outExpo }}
-            className="overflow-hidden border-t border-border bg-background/90 backdrop-blur-xl sm:hidden"
+            className="overflow-hidden border-t border-border bg-background shadow-[var(--shadow-soft)] sm:hidden"
           >
             <ul className="px-5 py-4">
               {links.map((l, i) => (
