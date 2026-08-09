@@ -55,20 +55,20 @@ function SectionSeam() {
 
 function Studio() {
   const ref = useRef<HTMLDivElement>(null);
-  const { parallax } = useMotionProfile();
+  const { parallax, compact } = useMotionProfile();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const smooth = useSpring(scrollYProgress, SCROLL_SPRING.base);
-  const scale = useTransform(smooth, [0, 0.5, 1], [0.92, 1, 0.95]);
-  const y = useTransform(smooth, [0, 1], ["5%", "-5%"]);
+  const scale = useTransform(smooth, [0, 0.5, 1], compact ? [0.97, 1, 0.99] : [0.92, 1, 0.95]);
+  const y = useTransform(smooth, [0, 1], compact ? ["2%", "-2%"] : ["5%", "-5%"]);
 
   return (
-    <section id="about" className="relative isolate px-6 py-[14vh]">
+    <section id="about" className="relative isolate px-5 py-[10vh] sm:px-6 md:py-[14vh]">
       <Backdrop layers={[{ src: bgApproach1 }, { src: bgApproach2 }]} intensity={0.9} />
       <div className="mx-auto max-w-6xl">
-        <div ref={ref} className="grid items-center gap-12 md:grid-cols-2">
+        <div ref={ref} className="grid items-center gap-10 md:grid-cols-2 md:gap-12">
           <motion.div
             style={parallax ? { scale, y } : {}}
-            className="overflow-hidden rounded-3xl"
+            className="overflow-hidden rounded-2xl md:rounded-3xl"
           >
             <img
               src={vision}
@@ -81,10 +81,10 @@ function Studio() {
           </motion.div>
           <Reveal>
             <Kicker>Studio Thesis</Kicker>
-            <h2 className="display-xl mt-5 text-[clamp(2rem,4.2vw,3.2rem)]">
+            <h2 className="display-xl mt-4 text-balance text-[clamp(1.85rem,7vw,3.2rem)] sm:mt-5 md:text-[clamp(2rem,4.2vw,3.2rem)]">
               AI research, built into products.
             </h2>
-            <div className="mt-6 max-w-[46ch] space-y-4 text-[17px] leading-relaxed text-muted-foreground">
+            <div className="mt-5 max-w-[46ch] space-y-4 text-[15px] leading-relaxed text-muted-foreground sm:mt-6 sm:text-[17px]">
               <p>
                 Ru'ya is the creative and engineering studio behind Mohammed
                 Sanin's AI research, product experiments, and production-ready
@@ -103,9 +103,9 @@ function Studio() {
           </Reveal>
         </div>
 
-        <Reveal className="mt-[12vh]">
+        <Reveal className="mt-[9vh] md:mt-[12vh]">
           <blockquote className="mx-auto max-w-3xl text-center">
-            <p className="display-xl text-[clamp(1.7rem,3.6vw,2.8rem)]">
+            <p className="display-xl text-balance text-[clamp(1.5rem,6vw,2.8rem)] md:text-[clamp(1.7rem,3.6vw,2.8rem)]">
               Intelligence should feel invisible.
               <span className="text-copper-gradient">
                 {" "}
