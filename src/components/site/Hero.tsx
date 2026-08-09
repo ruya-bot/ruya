@@ -11,17 +11,17 @@ const lines = ["Designing Intelligent Systems", "for Real-World Problems."];
 
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
-  const { parallax, choreography } = useMotionProfile();
+  const { parallax, choreography, compact } = useMotionProfile();
 
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
   });
   const smooth = useSpring(scrollYProgress, SCROLL_SPRING.heavy);
-  const objectY = useTransform(smooth, [0, 1], ["0%", "18%"]);
-  const objectScale = useTransform(smooth, [0, 1], [1, 1.12]);
-  const objectBlur = useTransform(smooth, [0, 1], ["blur(0px)", "blur(6px)"]);
-  const textY = useTransform(smooth, [0, 1], ["0%", "-26%"]);
+  const objectY = useTransform(smooth, [0, 1], ["0%", compact ? "12%" : "18%"]);
+  const objectScale = useTransform(smooth, [0, 1], [1, compact ? 1.07 : 1.12]);
+  const objectBlur = useTransform(smooth, [0, 1], ["blur(0px)", compact ? "blur(3px)" : "blur(6px)"]);
+  const textY = useTransform(smooth, [0, 1], ["0%", compact ? "-14%" : "-26%"]);
   const fade = useTransform(smooth, [0, 0.72], [1, 0]);
   const cueFade = useTransform(smooth, [0, 0.25], [1, 0]);
 
@@ -32,12 +32,16 @@ export function Hero() {
       : { duration: 0.01 };
 
   return (
-    <section ref={ref} id="top" className="veil relative isolate h-[112vh] overflow-hidden">
+    <section
+      ref={ref}
+      id="top"
+      className="veil relative isolate h-[100svh] min-h-[640px] overflow-hidden md:h-[112vh]"
+    >
       <Backdrop layers={[{ src: bgHero1 }, { src: bgHero2 }]} intensity={0.5} />
 
       <motion.div
         style={parallax ? { y: objectY, scale: objectScale, filter: objectBlur } : {}}
-        className="pointer-events-none absolute inset-0 flex items-end justify-center pb-[2vh]"
+        className="pointer-events-none absolute inset-0 flex items-end justify-center pb-[6vh] md:pb-[2vh]"
       >
         <motion.img
           src={heroObject}
@@ -47,24 +51,24 @@ export function Hero() {
           initial={choreography ? { opacity: 0, scale: 1.05, filter: "blur(20px)" } : false}
           animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
           transition={anim(0, 1.5)}
-          className="w-[min(44vh,440px)] max-w-none select-none opacity-90 [mask-image:radial-gradient(70%_70%_at_50%_60%,#000_55%,transparent_100%)]"
+          className="w-[min(38vh,88vw,440px)] max-w-none select-none opacity-90 [mask-image:radial-gradient(70%_70%_at_50%_60%,#000_55%,transparent_100%)]"
         />
       </motion.div>
 
       <motion.div
         style={parallax ? { y: textY, opacity: fade } : {}}
-        className="relative z-10 mx-auto flex h-screen max-w-5xl flex-col items-center justify-start px-6 pt-[17vh] text-center"
+        className="relative z-10 mx-auto flex h-full max-w-5xl flex-col items-center justify-start px-5 pt-[15vh] text-center sm:px-6 md:h-screen md:pt-[17vh]"
       >
         <motion.p
           initial={choreography ? { opacity: 0, y: 10 } : false}
           animate={{ opacity: 1, y: 0 }}
           transition={anim(step(0), DUR.slow)}
-          className="mb-7 text-[11px] font-semibold uppercase tracking-[0.34em] text-muted-foreground"
+          className="mb-5 text-[10px] font-semibold uppercase tracking-[0.3em] text-muted-foreground sm:mb-7 sm:text-[11px] sm:tracking-[0.34em]"
         >
           Ru'ya Studio
         </motion.p>
 
-        <h1 className="display-xl text-[clamp(2.2rem,6.2vw,5rem)]">
+        <h1 className="display-xl text-balance text-[clamp(2rem,8.4vw,5rem)] md:text-[clamp(2.2rem,6.2vw,5rem)]">
           {lines.map((line, i) => (
             <motion.span
               key={line}
@@ -86,7 +90,7 @@ export function Hero() {
           initial={choreography ? { opacity: 0, y: 14 } : false}
           animate={{ opacity: 1, y: 0 }}
           transition={anim(step(4), DUR.slow + 0.2)}
-          className="mt-7 max-w-xl text-balance text-[17px] leading-relaxed text-muted-foreground"
+          className="mt-6 max-w-xl text-balance text-[15px] leading-relaxed text-muted-foreground sm:mt-7 sm:text-[17px]"
         >
           AI Engineer specializing in Computer Vision, Generative AI, Deep
           Learning, Autonomous Agents and end-to-end AI products.
@@ -96,24 +100,24 @@ export function Hero() {
           initial={choreography ? { opacity: 0, y: 14 } : false}
           animate={{ opacity: 1, y: 0 }}
           transition={anim(step(5), DUR.slow + 0.2)}
-          className="mt-10 flex flex-wrap items-center justify-center gap-3"
+          className="mt-8 flex w-full max-w-sm flex-col items-stretch gap-3 sm:mt-10 sm:w-auto sm:max-w-none sm:flex-row sm:items-center sm:justify-center"
         >
           <a
             href="#projects"
-            className="inline-flex rounded-xl bg-foreground px-7 py-3.5 text-sm font-semibold text-background transition-[transform,opacity] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.02] active:scale-[0.99]"
+            className="inline-flex justify-center rounded-xl bg-foreground px-7 py-4 text-sm font-semibold text-background transition-[transform,opacity] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.02] active:scale-[0.98] sm:py-3.5"
           >
             Explore Projects
           </a>
           <a
             href="#contact"
-            className="inline-flex rounded-xl border border-border bg-background/70 px-7 py-3.5 text-sm font-semibold backdrop-blur transition-colors duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-copper hover:text-copper"
+            className="inline-flex justify-center rounded-xl border border-border bg-background/70 px-7 py-4 text-sm font-semibold backdrop-blur transition-[color,border-color,transform] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-copper hover:text-copper active:scale-[0.98] sm:py-3.5"
           >
             Let's Build Together
           </a>
         </motion.div>
       </motion.div>
 
-      {choreography && (
+      {choreography && !compact && (
         <motion.div
           style={parallax ? { opacity: cueFade } : {}}
           className="absolute inset-x-0 bottom-[12vh] z-10 flex justify-center"
