@@ -11,7 +11,6 @@ import { Backdrop } from "./Backdrop";
 import { EASE, SCROLL_SPRING } from "@/lib/motion";
 import { useMotionProfile } from "@/hooks/useMotionProfile";
 import vision from "@/assets/vision.jpg";
-import layers from "@/assets/layers.jpg";
 import bgApproach1 from "@/assets/bg-approach-1.jpg";
 import bgApproach2 from "@/assets/bg-approach-2.jpg";
 import bgLayers1 from "@/assets/bg-layers-1.jpg";
@@ -530,19 +529,6 @@ function ResearchAndTech() {
             </div>
           </motion.div>
         </div>
-
-        <Reveal className="mt-[9vh] md:mt-[12vh]">
-          <div className="overflow-hidden rounded-2xl md:rounded-3xl">
-            <img
-              src={layers}
-              alt="Layered translucent glass panes with warm rim light"
-              loading="lazy"
-              width={1600}
-              height={1008}
-              className="w-full"
-            />
-          </div>
-        </Reveal>
       </div>
     </section>
   );
