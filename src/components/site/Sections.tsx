@@ -195,7 +195,7 @@ const expertise = [
 
 function Expertise() {
   return (
-    <section className="relative isolate px-5 py-[9vh] sm:px-6 md:py-[12vh]">
+    <section className="relative isolate px-5 py-[8vh] sm:px-6 md:py-[12vh]">
       <div className="mx-auto max-w-6xl">
         <Reveal>
           <Kicker>Core Expertise</Kicker>
@@ -203,7 +203,7 @@ function Expertise() {
         <div className="mt-8 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border bg-border sm:mt-10 lg:grid-cols-4">
           {expertise.map((e, i) => (
             <Reveal key={e} delay={i * 0.05} className="bg-background">
-              <div className="h-full px-4 py-6 transition-colors duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-surface sm:px-6 sm:py-8">
+              <div className="h-full px-4 py-6 touch-manipulation transition-all duration-200 ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:bg-surface active:scale-[0.98] active:bg-surface/80 sm:px-6 sm:py-8">
                 <p className="text-[10px] font-semibold tracking-[0.2em] text-muted-foreground">
                   {String(i + 1).padStart(2, "0")}
                 </p>
@@ -348,12 +348,12 @@ function ProjectCard({
     <div
       ref={ref}
       className="md:sticky"
-      style={{ top: `calc(14vh + ${i * 18}px)` }}
+      style={{ top: `calc(12vh + ${i * 18}px)` }}
     >
       <Reveal delay={i * 0.04}>
         <motion.article
           style={parallax ? { scale, opacity } : {}}
-          className="group grid gap-5 rounded-2xl border border-border bg-surface p-6 shadow-[var(--shadow-soft)] transition-[transform,border-color,box-shadow] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:border-copper/40 hover:shadow-[var(--shadow-float)] sm:p-8 md:grid-cols-[1fr_1.5fr] md:gap-6 md:rounded-3xl md:p-12"
+          className="group grid gap-5 rounded-2xl border border-border bg-surface p-6 shadow-[var(--shadow-soft)] touch-manipulation transition-all duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-1 hover:border-copper/40 hover:shadow-[var(--shadow-float)] active:scale-[0.985] sm:p-8 md:grid-cols-[1fr_1.5fr] md:gap-6 md:rounded-3xl md:p-12"
         >
           <div>
             <p className="text-[11px] font-semibold tracking-[0.24em] text-muted-foreground transition-colors duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:text-copper">
@@ -372,7 +372,7 @@ function ProjectCard({
               {p.tags.map((t) => (
                 <li
                   key={t}
-                  className="rounded-lg border border-border px-2.5 py-1.5 text-[12px] text-muted-foreground transition-colors duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-copper/50 hover:text-foreground sm:px-3 sm:text-[13px]"
+                  className="rounded-lg border border-border px-2.5 py-1.5 text-[12px] text-muted-foreground touch-manipulation transition-all duration-150 ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:border-copper/50 hover:text-foreground active:scale-95 active:border-copper/60 sm:px-3 sm:text-[13px]"
                 >
                   {t}
                 </li>
@@ -504,7 +504,7 @@ function ResearchAndTech() {
             <div className="mt-6 flex flex-wrap gap-2.5 sm:mt-8 sm:gap-3">
               {interests.map((s, i) => (
                 <Reveal key={s} delay={i * 0.035}>
-                  <span className="inline-block rounded-xl border border-border px-3.5 py-2 text-[13px] font-medium transition-[color,border-color,transform] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:border-copper hover:text-copper sm:px-4 sm:text-sm">
+                  <span className="inline-block rounded-xl border border-border px-3.5 py-2 text-[13px] font-medium touch-manipulation transition-all duration-150 ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-0.5 hover:border-copper hover:text-copper active:scale-95 active:border-copper/70 sm:px-4 sm:text-sm">
                     {s}
                   </span>
                 </Reveal>
@@ -522,7 +522,7 @@ function ResearchAndTech() {
             <div className="mt-6 flex flex-wrap gap-2.5 sm:mt-8 sm:gap-3">
               {technologies.map((s, i) => (
                 <Reveal key={s} delay={i * 0.03}>
-                  <span className="inline-block rounded-xl border border-border px-3.5 py-2 text-[13px] font-medium transition-[color,border-color,transform] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:border-copper hover:text-copper sm:px-4 sm:text-sm">
+                  <span className="inline-block rounded-xl border border-border px-3.5 py-2 text-[13px] font-medium touch-manipulation transition-all duration-150 ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-0.5 hover:border-copper hover:text-copper active:scale-95 active:border-copper/70 sm:px-4 sm:text-sm">
                     {s}
                   </span>
                 </Reveal>
@@ -559,7 +559,7 @@ function Contact() {
   return (
     <section
       id="contact"
-      className="veil relative isolate border-t border-border px-5 py-[11vh] sm:px-6 md:py-[16vh]"
+      className="veil relative isolate border-t border-border px-5 py-[11vh] sm:px-6 md:py-[16vh] pb-safe"
     >
       <Backdrop layers={[{ src: bgClosing1 }, { src: bgLayers2 }]} intensity={0.7} />
       <div className="mx-auto max-w-3xl">
@@ -605,7 +605,7 @@ function Contact() {
             </div>
             <button
               type="submit"
-              className="inline-flex w-full justify-center rounded-xl bg-foreground px-8 py-4 text-sm font-semibold text-background transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98] sm:w-auto"
+              className="inline-flex w-full justify-center rounded-xl bg-foreground px-8 py-4 text-sm font-semibold text-background touch-manipulation transition-all duration-200 ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:scale-[1.02] active:scale-[0.95] active:opacity-90 sm:w-auto shadow-sm"
             >
               Start the Conversation
             </button>

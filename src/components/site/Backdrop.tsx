@@ -21,17 +21,17 @@ export function Backdrop({
   intensity?: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const { parallax } = useMotionProfile();
+  const { parallax, compact } = useMotionProfile();
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],
   });
   const smooth = useSpring(scrollYProgress, SCROLL_SPRING.base);
 
-  const y0 = useTransform(smooth, [0, 1], ["-8%", "8%"]);
-  const y1 = useTransform(smooth, [0, 1], ["12%", "-12%"]);
-  const y2 = useTransform(smooth, [0, 1], ["-4%", "16%"]);
-  const s0 = useTransform(smooth, [0, 0.5, 1], [1.14, 1.04, 1.14]);
+  const y0 = useTransform(smooth, [0, 1], compact ? ["-4%", "4%"] : ["-8%", "8%"]);
+  const y1 = useTransform(smooth, [0, 1], compact ? ["6%", "-6%"] : ["12%", "-12%"]);
+  const y2 = useTransform(smooth, [0, 1], compact ? ["-2%", "8%"] : ["-4%", "16%"]);
+  const s0 = useTransform(smooth, [0, 0.5, 1], compact ? [1.08, 1.02, 1.08] : [1.14, 1.04, 1.14]);
   const fade = useTransform(smooth, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
   const o0 = useTransform(fade, (v) => v * 0.6 * intensity);
   const o1 = useTransform(fade, (v) => v * 0.38 * intensity);
@@ -41,7 +41,11 @@ export function Backdrop({
   const os = [o0, o1, o2];
   const staticOpacity = [0.5, 0.32, 0.2];
 
-  const visible = parallax ? layers.slice(0, 3) : layers.slice(0, 1);
+  const visible = parallax
+    ? compact
+      ? layers.slice(0, 2)
+      : layers.slice(0, 3)
+    : layers.slice(0, 1);
 
   return (
     <div
@@ -63,18 +67,19 @@ export function Backdrop({
             parallax
               ? {
                   y: ys[i] ?? y0,
-                  scale: i === 0 ? s0 : 1.1,
+                  scale: i === 0 ? s0 : 1.06,
                   opacity: os[i] ?? o2,
                   willChange: "transform, opacity",
                 }
               : {
-                  scale: 1.06,
+                  scale: 1.04,
                   opacity: (staticOpacity[i] ?? 0.2) * intensity,
                 }
           }
-          className="absolute inset-0 h-full w-full select-none object-cover mix-blend-multiply [mask-image:radial-gradient(75%_65%_at_50%_50%,#000_0%,transparent_100%)]"
+          className="gpu-layer absolute inset-0 h-full w-full select-none object-cover mix-blend-multiply [mask-image:radial-gradient(75%_65%_at_50%_50%,#000_0%,transparent_100%)]"
         />
       ))}
     </div>
   );
 }
+

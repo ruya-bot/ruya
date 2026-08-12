@@ -20,20 +20,20 @@ export function Reveal({
   y?: number;
   blur?: number;
 }) {
-  const { choreography, lowPower } = useMotionProfile();
+  const { choreography, lowPower, compact } = useMotionProfile();
 
   if (!choreography) {
     return <div className={className}>{children}</div>;
   }
 
-  // Low-end devices keep the fade but drop blur (expensive) and shorten stagger.
-  const useBlur = !lowPower && blur > 0;
+  // Low-end / mobile devices drop heavy blur filter repaints and use responsive offsets.
+  const useBlur = !lowPower && !compact && blur > 0;
 
   return (
     <motion.div
       initial={{
         opacity: 0,
-        y: lowPower ? Math.min(y, 12) : y,
+        y: compact || lowPower ? Math.min(y, 10) : y,
         ...(useBlur ? { filter: `blur(${blur}px)` } : {}),
       }}
       whileInView={{
@@ -41,10 +41,14 @@ export function Reveal({
         y: 0,
         ...(useBlur ? { filter: "blur(0px)" } : {}),
       }}
-      viewport={{ once: true, amount: 0.22, margin: "0px 0px -10% 0px" }}
+      viewport={{
+        once: true,
+        amount: compact ? 0.14 : 0.22,
+        margin: compact ? "0px 0px -4% 0px" : "0px 0px -10% 0px",
+      }}
       transition={{
         delay: lowPower ? delay * 0.5 : delay,
-        duration: lowPower ? DUR.base : DUR.slow + 0.18,
+        duration: lowPower ? DUR.base : compact ? DUR.base + 0.1 : DUR.slow + 0.18,
         ease: EASE.outExpo,
         opacity: {
           delay: lowPower ? delay * 0.5 : delay,
@@ -58,3 +62,4 @@ export function Reveal({
     </motion.div>
   );
 }
+

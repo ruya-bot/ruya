@@ -32,13 +32,13 @@ export function Nav() {
   return (
     <motion.header
       style={{ backdropFilter, backgroundColor, borderColor }}
-      className="fixed inset-x-0 top-0 z-50 border-b border-transparent"
+      className="fixed inset-x-0 top-0 z-50 border-b border-transparent pt-safe"
     >
       <nav className="mx-auto flex h-14 max-w-6xl items-center justify-between px-5 sm:px-6">
         <a
           href="#top"
           onClick={() => setOpen(false)}
-          className="rounded-sm text-[13px] font-extrabold tracking-tight transition-opacity duration-200 hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-copper"
+          className="rounded-sm text-[13px] font-extrabold tracking-tight touch-manipulation transition-[transform,opacity] duration-150 ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:opacity-70 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-copper"
         >
           Ru'ya<span className="text-copper">.</span>
         </a>
@@ -47,7 +47,7 @@ export function Nav() {
             <li key={l.label}>
               <a
                 href={l.href}
-                className="relative rounded-sm transition-colors duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] after:absolute after:-bottom-1 after:left-0 after:h-px after:w-full after:origin-right after:scale-x-0 after:bg-copper after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.22,1,0.36,1)] hover:text-foreground hover:after:origin-left hover:after:scale-x-100 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-copper"
+                className="relative rounded-sm transition-colors duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] after:absolute after:-bottom-1 after:left-0 after:h-px after:w-full after:origin-right after:scale-x-0 after:bg-copper after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.22,1,0.36,1)] hover:text-foreground hover:after:origin-left hover:after:scale-x-100 active:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-copper"
               >
                 {l.label}
               </a>
@@ -60,7 +60,7 @@ export function Nav() {
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
-          className="-mr-2 grid h-10 w-10 shrink-0 place-items-center rounded-xl transition-colors duration-200 active:bg-surface sm:hidden"
+          className="-mr-2 grid h-10 w-10 shrink-0 place-items-center rounded-xl touch-manipulation transition-transform duration-150 active:scale-90 active:bg-surface sm:hidden"
         >
           <span className="relative block h-3 w-5">
             <motion.span
@@ -84,8 +84,8 @@ export function Nav() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.42, ease: EASE.outExpo }}
-            className="overflow-hidden border-t border-border bg-background shadow-[var(--shadow-soft)] sm:hidden"
+            transition={{ duration: 0.38, ease: EASE.outQuint }}
+            className="overflow-hidden border-t border-border bg-background/95 backdrop-blur-lg shadow-[var(--shadow-soft)] sm:hidden pb-safe"
           >
             <ul className="px-5 py-4">
               {links.map((l, i) => (
@@ -93,12 +93,12 @@ export function Nav() {
                   key={l.label}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.06 + i * 0.05, duration: 0.5, ease: EASE.outExpo }}
+                  transition={{ delay: 0.04 + i * 0.04, duration: 0.4, ease: EASE.outExpo }}
                 >
                   <a
                     href={l.href}
                     onClick={() => setOpen(false)}
-                    className="block border-b border-border/60 py-4 text-[17px] font-semibold tracking-tight last:border-0"
+                    className="block border-b border-border/60 py-4 text-[17px] font-semibold tracking-tight touch-manipulation transition-all duration-150 active:translate-x-1 active:text-copper last:border-0"
                   >
                     {l.label}
                   </a>
