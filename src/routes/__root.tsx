@@ -77,14 +77,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Ru'ya Studio — Intelligent Systems. Built for the Real World." },
+      {
+        name: "description",
+        content:
+          "Ru'ya Studio is an AI engineering and product studio building intelligent systems across computer vision, generative AI, autonomous agents, predictive intelligence, and AI-powered products.",
+      },
+      { name: "author", content: "Ru'ya Studio" },
+      { property: "og:title", content: "Ru'ya Studio — AI Engineering & Product Studio" },
+      {
+        property: "og:description",
+        content:
+          "Ru'ya Studio builds intelligent software for businesses, startups, and organizations. Combining AI research, product engineering, and thoughtful design.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },

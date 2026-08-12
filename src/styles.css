@@ -68,29 +68,29 @@
 
 :root {
   --radius: 1rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.18 0.012 60);
-  --card: oklch(1 0 0);
+  --background: oklch(0.985 0.005 85); /* #FAF9F6 Warm Ivory / Porcelain */
+  --foreground: oklch(0.18 0.012 60);  /* Soft graphite / near-black */
+  --card: oklch(0.99 0.003 80);
   --card-foreground: oklch(0.18 0.012 60);
-  --popover: oklch(1 0 0);
+  --popover: oklch(0.99 0.003 80);
   --popover-foreground: oklch(0.18 0.012 60);
-  --primary: oklch(0.58 0.13 48);
+  --primary: oklch(0.56 0.12 48);      /* Restrained metallic copper */
   --primary-foreground: oklch(0.99 0.004 80);
-  --secondary: oklch(0.968 0.004 70);
+  --secondary: oklch(0.965 0.005 75);
   --secondary-foreground: oklch(0.22 0.012 60);
-  --muted: oklch(0.97 0.004 70);
-  --muted-foreground: oklch(0.55 0.015 60);
-  --accent: oklch(0.95 0.02 60);
+  --muted: oklch(0.96 0.005 75);
+  --muted-foreground: oklch(0.52 0.015 60);
+  --accent: oklch(0.95 0.015 65);
   --accent-foreground: oklch(0.35 0.09 48);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.92 0.005 70);
-  --input: oklch(0.92 0.005 70);
-  --ring: oklch(0.58 0.13 48);
-  --copper: oklch(0.58 0.13 48);
-  --copper-soft: oklch(0.78 0.08 55);
-  --surface: oklch(0.985 0.003 75);
-  --gradient-copper: linear-gradient(135deg, oklch(0.62 0.14 48), oklch(0.78 0.09 60));
+  --border: oklch(0.915 0.006 75);
+  --input: oklch(0.915 0.006 75);
+  --ring: oklch(0.56 0.12 48);
+  --copper: oklch(0.56 0.12 48);
+  --copper-soft: oklch(0.76 0.07 55);
+  --surface: oklch(0.975 0.004 80);
+  --gradient-copper: linear-gradient(135deg, oklch(0.58 0.13 48), oklch(0.72 0.08 60));
   --gradient-veil: radial-gradient(
     60% 50% at 50% 0%,
     color-mix(in oklab, var(--copper) 10%, transparent),
