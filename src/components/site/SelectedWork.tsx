@@ -1,183 +1,507 @@
+/**
+ * SelectedWork — "Three Systems / One Canvas"
+ *
+ * Staggered horizontal panels on desktop with continuous subtle drift motion.
+ * Hovering a panel activates it, recedes others, and smoothly transitions
+ * the TRUSTED COLLABORATION founder story directly tied to that project.
+ *
+ * 01 — GridPulse          (Traffic Intelligence)
+ * 02 — Crewly             (Enterprise Intelligence)
+ * 03 — Freshness Passport (Food Intelligence)
+ *
+ * Mobile: Vertical interactive storytelling sequence.
+ */
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Reveal } from "./Reveal";
-import { Backdrop } from "./Backdrop";
 import { caseStudies } from "@/data/caseStudies";
 import type { CaseStudy } from "@/types/caseStudy";
 import { CaseStudyModal } from "./CaseStudyModal";
-import bgWork1 from "@/assets/bg-work-1.jpg";
-import bgWork2 from "@/assets/bg-work-2.jpg";
+import { EASE } from "@/lib/motion";
 
+// ─── Shelf metadata ──────────────────────────────────────────────────────────
+const SHELF: Record<
+  string,
+  { field: string; tag: string; offset: number }
+> = {
+  gridpulse: {
+    field: "Traffic Intelligence",
+    tag: "Mobility AI",
+    offset: 0,
+  },
+  crewly: {
+    field: "Enterprise Intelligence",
+    tag: "Workspace AI",
+    offset: 40,
+  },
+  "freshness-passport": {
+    field: "Food Intelligence",
+    tag: "Retail AI",
+    offset: 80,
+  },
+};
+
+// ─── Founder & Collaboration stories tied to each project ────────────────────
+interface CollaborationStory {
+  id: string;
+  project: string;
+  context: string;
+  quote: string;
+  attribution: string;
+  role: string;
+  isNeutral?: boolean;
+}
+
+const STORIES: Record<string, CollaborationStory> = {
+  gridpulse: {
+    id: "gridpulse",
+    project: "GRIDPULSE",
+    context: "AI traffic intelligence for smarter mobility.",
+    quote:
+      "GridPulse transforms visual traffic streams into real-time congestion intelligence, enabling automated monitoring and predictive decision support for urban mobility.",
+    attribution: "Ru'ya Research & Engineering",
+    role: "System Architecture & AI Intelligence",
+    isNeutral: true,
+  },
+  crewly: {
+    id: "crewly",
+    project: "CREWLY",
+    context: "From idea to intelligent workspace.",
+    quote:
+      "Ru'ya turned the idea behind Crewly into a complete product experience — from the workspace itself to the systems, interactions, and intelligence that make it feel like a real product.",
+    attribution: "Mohammed Sanin",
+    role: "Founder, Crewly",
+  },
+  "freshness-passport": {
+    id: "freshness-passport",
+    project: "FRESHNESS PASSPORT",
+    context: "From concept to product.",
+    quote:
+      "Ru'ya took the idea I had for Freshness Passport and turned it into something far beyond the initial concept. From shaping the product to creating the product-related visuals and videos, they brought the whole idea to life brilliantly.",
+    attribution: "Abdul Varis",
+    role: "Founder, Freshness Passport",
+  },
+};
+
+// ─── Abstract Visual Representations ─────────────────────────────────────────
+function AbstractVisual({ projectId, isActive }: { projectId: string; isActive: boolean }) {
+  if (projectId === "gridpulse") {
+    // Traffic network / road intelligence
+    return (
+      <div className="relative h-20 w-full overflow-hidden rounded-lg bg-surface/40 p-3 border border-border/30">
+        <svg className="h-full w-full opacity-60" viewBox="0 0 200 60" fill="none">
+          {/* Grid lines */}
+          <line x1="0" y1="20" x2="200" y2="20" stroke="currentColor" strokeWidth="0.8" strokeDasharray="3 3" className="text-foreground/30" />
+          <line x1="0" y1="40" x2="200" y2="40" stroke="currentColor" strokeWidth="0.8" strokeDasharray="3 3" className="text-foreground/30" />
+          <line x1="60" y1="0" x2="60" y2="60" stroke="currentColor" strokeWidth="0.8" className="text-foreground/20" />
+          <line x1="140" y1="0" x2="140" y2="60" stroke="currentColor" strokeWidth="0.8" className="text-foreground/20" />
+          {/* Nodes */}
+          <circle cx="60" cy="20" r="3.5" className={isActive ? "fill-copper" : "fill-foreground/40"} />
+          <circle cx="140" cy="20" r="3" className="fill-foreground/40" />
+          <circle cx="60" cy="40" r="3" className="fill-foreground/40" />
+          <circle cx="140" cy="40" r="3.5" className={isActive ? "fill-copper" : "fill-foreground/40"} />
+          {/* Signal path */}
+          <motion.path
+            d="M 20 20 L 60 20 L 140 40 L 180 40"
+            stroke={isActive ? "oklch(0.56 0.12 48)" : "currentColor"}
+            strokeWidth="1.5"
+            className={isActive ? "" : "text-foreground/50"}
+            initial={{ pathLength: 0.8 }}
+            animate={{ pathLength: [0.3, 1, 0.3] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </svg>
+      </div>
+    );
+  }
+
+  if (projectId === "crewly") {
+    // Abstract workspace system — task nodes & connected panels
+    return (
+      <div className="relative h-20 w-full overflow-hidden rounded-lg bg-surface/40 p-3 border border-border/30 flex items-center justify-around">
+        <div className="flex flex-col gap-1.5 w-full">
+          <div className="flex items-center justify-between gap-2">
+            <div className="h-2 w-12 rounded-full bg-foreground/20" />
+            <motion.div
+              className={`h-2 rounded-full ${isActive ? "bg-copper" : "bg-foreground/30"}`}
+              style={{ width: isActive ? "45%" : "30%" }}
+              animate={isActive ? { width: ["35%", "55%", "35%"] } : {}}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <div className={`h-2.5 w-2.5 rounded-sm ${isActive ? "bg-copper/80" : "bg-foreground/25"}`} />
+            <div className="h-1.5 w-24 rounded bg-foreground/15" />
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="h-2.5 w-2.5 rounded-sm bg-foreground/25" />
+            <div className="h-1.5 w-16 rounded bg-foreground/15" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Freshness Passport — circular lifecycle ring
+  return (
+    <div className="relative h-20 w-full overflow-hidden rounded-lg bg-surface/40 p-3 border border-border/30 flex items-center justify-center">
+      <svg className="h-14 w-14" viewBox="0 0 50 50" fill="none">
+        <circle cx="25" cy="25" r="18" stroke="currentColor" strokeWidth="1" className="text-foreground/20" />
+        <motion.circle
+          cx="25"
+          cy="25"
+          r="18"
+          stroke={isActive ? "oklch(0.56 0.12 48)" : "currentColor"}
+          strokeWidth="1.8"
+          strokeDasharray="113"
+          strokeDashoffset="35"
+          strokeLinecap="round"
+          className={isActive ? "" : "text-foreground/50"}
+          animate={isActive ? { rotate: [0, 360] } : {}}
+          transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+          style={{ transformOrigin: "25px 25px" }}
+        />
+        <circle cx="25" cy="25" r="6" className={isActive ? "fill-copper/80" : "fill-foreground/30"} />
+      </svg>
+    </div>
+  );
+}
+
+// ─── Trusted Collaboration Display Component ──────────────────────────────────
+function TrustedCollaborationSection({ activeId }: { activeId: string }) {
+  const story = STORIES[activeId] ?? STORIES["crewly"]!;
+
+  return (
+    <div className="mx-auto max-w-6xl py-14 md:py-20">
+      <Reveal>
+        <div className="grid gap-8 md:grid-cols-[1fr_1.6fr] md:items-start border-t border-border/40 pt-12">
+          {/* Left column: Section label + active project info */}
+          <div className="space-y-4">
+            <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-copper">
+              TRUSTED COLLABORATION
+            </p>
+
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={story.id + "-meta"}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.45, ease: EASE.outExpo }}
+                className="space-y-1"
+              >
+                <div className="flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 rounded-full bg-copper" />
+                  <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-foreground/70">
+                    {story.project}
+                  </p>
+                </div>
+                <p className="text-xs font-medium text-muted-foreground">{story.context}</p>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {/* Right column: Dynamic quote / story transition */}
+          <div className="overflow-hidden">
+            <AnimatePresence mode="wait">
+              <motion.blockquote
+                key={story.id}
+                initial={{ opacity: 0, y: 12, filter: "blur(4px)" }}
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                exit={{ opacity: 0, y: -10, filter: "blur(2px)" }}
+                transition={{ duration: 0.55, ease: EASE.outExpo }}
+                className="space-y-5"
+              >
+                {!story.isNeutral && (
+                  <span
+                    className="block font-serif leading-none text-copper/35 select-none"
+                    style={{ fontSize: "3.8rem", lineHeight: 0.8 }}
+                    aria-hidden
+                  >
+                    "
+                  </span>
+                )}
+
+                <p
+                  className={`text-base sm:text-lg font-medium text-foreground leading-relaxed ${
+                    !story.isNeutral ? "-mt-2" : ""
+                  }`}
+                >
+                  {story.quote}
+                </p>
+
+                <footer className="flex items-center gap-3 pt-1">
+                  <div className="h-px w-8 bg-border shrink-0" />
+                  <cite className="not-italic text-xs font-semibold text-muted-foreground tracking-wide">
+                    — {story.attribution} · {story.role}
+                  </cite>
+                </footer>
+              </motion.blockquote>
+            </AnimatePresence>
+          </div>
+        </div>
+      </Reveal>
+    </div>
+  );
+}
+
+// ─── Desktop Panel Component ──────────────────────────────────────────────────
+function DesktopPanel({
+  study,
+  isActive,
+  onHover,
+  onOpen,
+}: {
+  study: CaseStudy;
+  isActive: boolean;
+  onHover: () => void;
+  onOpen: () => void;
+}) {
+  const { field, offset } = SHELF[study.id]!;
+
+  return (
+    <motion.div
+      style={{ marginTop: `${offset}px` }}
+      animate={{
+        y: isActive ? -4 : 0,
+        scale: isActive ? 1.02 : 0.98,
+        opacity: isActive ? 1 : 0.65,
+      }}
+      transition={{ duration: 0.45, ease: EASE.outExpo }}
+      className="w-full"
+    >
+      <button
+        type="button"
+        onClick={onOpen}
+        onMouseEnter={onHover}
+        className={`group relative text-left w-full rounded-2xl border transition-all duration-400
+          ${
+            isActive
+              ? "border-copper/60 bg-surface/80 shadow-md"
+              : "border-border/50 bg-background hover:border-border/80"
+          }
+          focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-copper/50`}
+      >
+        {/* Top gold accent line */}
+        <motion.div
+          className="absolute inset-x-0 top-0 h-[2px] rounded-t-2xl"
+          animate={{ opacity: isActive ? 1 : 0, scaleX: isActive ? 1 : 0.2 }}
+          transition={{ duration: 0.4, ease: EASE.outExpo }}
+          style={{ background: "oklch(0.56 0.12 48)", transformOrigin: "left" }}
+        />
+
+        <div
+          className="flex flex-col justify-between p-8 xl:p-9 space-y-6"
+          style={{ minHeight: "clamp(260px, 34vh, 360px)" }}
+        >
+          {/* Top header */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-[10px] font-bold tracking-[0.28em] text-copper">
+                {study.number}
+              </span>
+              {/* Cursor indicator label */}
+              <motion.span
+                animate={{ opacity: isActive ? 1 : 0, x: isActive ? 0 : -4 }}
+                transition={{ duration: 0.3 }}
+                className="text-[9px] font-bold uppercase tracking-widest text-copper bg-copper/10 px-2 py-0.5 rounded-full"
+              >
+                EXPLORE →
+              </motion.span>
+            </div>
+
+            <div className="space-y-1">
+              <h3
+                className={`font-black tracking-tight leading-[1.0] transition-colors duration-300 ${
+                  isActive ? "text-copper" : "text-foreground"
+                }`}
+                style={{ fontSize: "clamp(1.4rem, 2.6vw, 2.1rem)" }}
+              >
+                {study.name.toUpperCase()}
+              </h3>
+              <p className="text-xs font-semibold text-muted-foreground">{field}</p>
+            </div>
+          </div>
+
+          {/* Abstract system visual */}
+          <AbstractVisual projectId={study.id} isActive={isActive} />
+
+          {/* Card footer arrow */}
+          <div className="flex items-center justify-between pt-2 border-t border-border/30">
+            <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground/60">
+              {study.currentState}
+            </span>
+            <motion.span
+              animate={{ x: isActive ? 3 : 0, y: isActive ? -3 : 0, opacity: isActive ? 1 : 0.4 }}
+              transition={{ duration: 0.3, ease: EASE.outExpo }}
+              className="text-sm font-light text-foreground"
+              aria-hidden
+            >
+              ↗
+            </motion.span>
+          </div>
+        </div>
+      </button>
+    </motion.div>
+  );
+}
+
+// ─── Main Section Component ──────────────────────────────────────────────────
 export function SelectedWork() {
   const [selectedStudy, setSelectedStudy] = useState<CaseStudy | null>(null);
+  const [activeProjectId, setActiveProjectId] = useState<string>("crewly");
+  const [isUserHovering, setIsUserHovering] = useState<boolean>(false);
 
   const handleSelectNext = () => {
     if (!selectedStudy) return;
-    const currentIndex = caseStudies.findIndex((c) => c.id === selectedStudy.id);
-    const nextIndex = (currentIndex + 1) % caseStudies.length;
-    setSelectedStudy(caseStudies[nextIndex] ?? null);
+    const i = caseStudies.findIndex((c) => c.id === selectedStudy.id);
+    setSelectedStudy(caseStudies[(i + 1) % caseStudies.length] ?? null);
   };
-
   const handleSelectPrev = () => {
     if (!selectedStudy) return;
-    const currentIndex = caseStudies.findIndex((c) => c.id === selectedStudy.id);
-    const prevIndex = (currentIndex - 1 + caseStudies.length) % caseStudies.length;
-    setSelectedStudy(caseStudies[prevIndex] ?? null);
+    const i = caseStudies.findIndex((c) => c.id === selectedStudy.id);
+    setSelectedStudy(
+      caseStudies[(i - 1 + caseStudies.length) % caseStudies.length] ?? null
+    );
   };
 
   return (
-    <section id="work" className="relative isolate px-5 py-[10vh] sm:px-6 md:py-[14vh]">
-      <Backdrop layers={[{ src: bgWork1 }, { src: bgWork2 }]} intensity={0.7} />
+    <section id="work" className="relative isolate px-5 sm:px-6">
 
-      <div className="mx-auto max-w-6xl space-y-16">
-        {/* Section Header */}
+      {/* ── Section Header ── */}
+      <div className="mx-auto max-w-6xl pt-[10vh] pb-10 md:pt-[14vh] md:pb-14">
         <Reveal>
-          <div className="max-w-3xl space-y-3">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-copper">
-              Selected Work
-            </p>
-            <h2 className="display-xl text-balance text-[clamp(2.1rem,7.5vw,4.2rem)] leading-none">
-              Three systems. <span className="text-copper-gradient">Three real-world problems.</span>
-            </h2>
-            <p className="text-[15px] leading-relaxed text-muted-foreground sm:text-[18px]">
-              Ru’ya builds AI systems where intelligence has a practical purpose — from
-              understanding physical environments to detecting synthetic media and reducing food waste.
-            </p>
-          </div>
-        </Reveal>
-
-        {/* 3 Flagship Case Study Chapters */}
-        <div className="space-y-12 sm:space-y-16">
-          {caseStudies.map((study, i) => (
-            <Reveal key={study.id} delay={i * 0.06}>
-              <article className="group relative overflow-hidden rounded-3xl border border-border bg-surface p-6 sm:p-10 md:p-12 shadow-[var(--shadow-soft)] transition-all duration-300 hover:border-copper/40 hover:shadow-[var(--shadow-float)]">
-                <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr] lg:items-center">
-                  {/* Left Column Text & Pipeline */}
-                  <div className="space-y-6">
-                    <div className="flex items-center gap-3">
-                      <span className="text-xs font-bold tracking-[0.24em] text-copper">
-                        CHAPTER {study.number}
-                      </span>
-                      <span className="h-3 w-px bg-border" />
-                      <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                        {study.label}
-                      </span>
-                    </div>
-
-                    <div>
-                      <h3 className="display-xl text-[clamp(1.8rem,5vw,3rem)] leading-tight text-foreground transition-colors duration-300 group-hover:text-copper">
-                        {study.name}
-                      </h3>
-                      <p className="mt-2 text-base font-semibold text-foreground/90">
-                        {study.title}
-                      </p>
-                      <p className="mt-3 text-xs leading-relaxed text-muted-foreground sm:text-sm">
-                        {study.description}
-                      </p>
-                    </div>
-
-                    {/* System Pipeline pill flow */}
-                    <div className="space-y-2 pt-2">
-                      <p className="text-[10px] font-bold tracking-widest text-copper uppercase">
-                        SYSTEM FLOW
-                      </p>
-                      <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-foreground">
-                        {study.systemPipeline.map((step, idx) => (
-                          <span key={step} className="flex items-center gap-2">
-                            <span className="rounded-md border border-border bg-background px-2.5 py-1 text-[11px] font-semibold">
-                              {step}
-                            </span>
-                            {idx < study.systemPipeline.length - 1 && (
-                              <span className="text-muted-foreground/60">→</span>
-                            )}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Focus tags */}
-                    <div className="flex flex-wrap gap-2 pt-2">
-                      {study.focus.map((f) => (
-                        <span
-                          key={f}
-                          className="rounded-lg border border-border bg-background px-3 py-1.5 text-xs text-muted-foreground"
-                        >
-                          {f}
-                        </span>
-                      ))}
-                    </div>
-
-                    {/* Interactive CTA */}
-                    <div className="pt-4">
-                      <button
-                        type="button"
-                        onClick={() => setSelectedStudy(study)}
-                        className="inline-flex items-center gap-2 rounded-xl bg-foreground px-6 py-3.5 text-xs font-semibold text-background touch-manipulation transition-all duration-200 hover:scale-[1.02] active:scale-95 shadow-sm"
-                      >
-                        Explore {study.name} →
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Right Column Visual Card */}
-                  <div
-                    onClick={() => setSelectedStudy(study)}
-                    className="cursor-pointer overflow-hidden rounded-2xl border border-border bg-background transition-transform duration-300 group-hover:scale-[1.01]"
-                  >
-                    <img
-                      src={study.visual}
-                      alt={study.name}
-                      className="h-64 sm:h-80 w-full object-cover mix-blend-multiply opacity-90 transition-opacity group-hover:opacity-100"
-                    />
-                  </div>
-                </div>
-              </article>
-            </Reveal>
-          ))}
-        </div>
-
-        {/* Case Study Philosophy Transition */}
-        <Reveal className="pt-8">
-          <div className="rounded-3xl border border-border bg-surface p-8 sm:p-12 text-center space-y-8">
-            <div className="space-y-3 max-w-2xl mx-auto">
-              <span className="text-[11px] font-semibold uppercase tracking-[0.3em] text-copper">
-                Case Study Philosophy
-              </span>
-              <h3 className="display-xl text-[clamp(1.8rem,5vw,3rem)] leading-none">
-                We don't showcase features.{" "}
-                <span className="text-copper-gradient">We showcase systems.</span>
-              </h3>
-            </div>
-
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              <div className="rounded-2xl border border-border bg-background p-5 text-left space-y-1.5">
-                <span className="text-[10px] font-bold text-copper uppercase">01 CONCEPT</span>
-                <p className="text-sm font-bold text-foreground">The Problem</p>
-                <p className="text-xs text-muted-foreground">What real-world problem existed?</p>
-              </div>
-
-              <div className="rounded-2xl border border-border bg-background p-5 text-left space-y-1.5">
-                <span className="text-[10px] font-bold text-copper uppercase">02 CONCEPT</span>
-                <p className="text-sm font-bold text-foreground">The Intelligence</p>
-                <p className="text-xs text-muted-foreground">Where does AI create value?</p>
-              </div>
-
-              <div className="rounded-2xl border border-border bg-background p-5 text-left space-y-1.5">
-                <span className="text-[10px] font-bold text-copper uppercase">03 CONCEPT</span>
-                <p className="text-sm font-bold text-foreground">The Engineering</p>
-                <p className="text-xs text-muted-foreground">How was the system actually built?</p>
-              </div>
-
-              <div className="rounded-2xl border border-border bg-background p-5 text-left space-y-1.5">
-                <span className="text-[10px] font-bold text-copper uppercase">04 CONCEPT</span>
-                <p className="text-sm font-bold text-foreground">The Impact</p>
-                <p className="text-xs text-muted-foreground">What does the system enable?</p>
-              </div>
-            </div>
-          </div>
+          <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-copper mb-4">
+            WORK
+          </p>
+          <h2
+            className="display-xl font-extrabold tracking-tight text-foreground leading-[0.97]"
+            style={{ fontSize: "clamp(2.4rem, 7.5vw, 5rem)" }}
+          >
+            What we're building.
+          </h2>
         </Reveal>
       </div>
 
-      {/* Modal / Drawer for detailed case study view */}
+      {/* ── Desktop Horizontal Shelf ── */}
+      <div
+        className="mx-auto max-w-6xl hidden md:grid grid-cols-3 gap-6 items-start"
+        onMouseEnter={() => setIsUserHovering(true)}
+        onMouseLeave={() => setIsUserHovering(false)}
+      >
+        {/* Continuous drift container wrapper */}
+        {caseStudies.map((study, idx) => {
+          const isActive = activeProjectId === study.id;
+          return (
+            <motion.div
+              key={study.id}
+              animate={
+                !isUserHovering
+                  ? {
+                      y: [0, idx % 2 === 0 ? -4 : 4, 0],
+                    }
+                  : { y: 0 }
+              }
+              transition={{
+                duration: 6 + idx,
+                repeat: Infinity,
+                repeatType: "mirror",
+                ease: "easeInOut",
+              }}
+            >
+              <DesktopPanel
+                study={study}
+                isActive={isActive}
+                onHover={() => setActiveProjectId(study.id)}
+                onOpen={() => setSelectedStudy(study)}
+              />
+            </motion.div>
+          );
+        })}
+      </div>
+
+      {/* ── Mobile Vertical Interactive Sequence ── */}
+      <div className="md:hidden mx-auto max-w-6xl space-y-8">
+        {caseStudies.map((study) => {
+          const story = STORIES[study.id]!;
+          const isActive = activeProjectId === study.id;
+
+          return (
+            <Reveal key={study.id}>
+              <div className="space-y-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveProjectId(study.id);
+                    setSelectedStudy(study);
+                  }}
+                  className={`group w-full text-left rounded-2xl border p-7 transition-all duration-300
+                    ${
+                      isActive
+                        ? "border-copper/60 bg-surface/80"
+                        : "border-border/50 bg-background hover:border-copper/40"
+                    }
+                    focus-visible:outline-none active:scale-[0.99]`}
+                >
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="space-y-1">
+                      <span className="font-mono text-[10px] font-bold tracking-[0.28em] text-copper">
+                        {study.number}
+                      </span>
+                      <h3 className="text-2xl font-black tracking-tight text-foreground transition-colors group-hover:text-copper">
+                        {study.name.toUpperCase()}
+                      </h3>
+                      <p className="text-xs font-semibold text-muted-foreground">
+                        {SHELF[study.id]!.field}
+                      </p>
+                    </div>
+                    <span className="text-xs font-bold uppercase tracking-widest text-copper bg-copper/10 px-2 py-1 rounded-full">
+                      EXPLORE →
+                    </span>
+                  </div>
+
+                  <AbstractVisual projectId={study.id} isActive={isActive} />
+                </button>
+
+                {/* Mobile story card directly below */}
+                <div className="rounded-xl border border-border/30 bg-surface/30 p-6 space-y-3">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-copper">
+                    TRUSTED COLLABORATION — {story.project}
+                  </p>
+                  <p className="text-sm font-medium text-foreground leading-relaxed">
+                    {story.quote}
+                  </p>
+                  <p className="text-xs font-semibold text-muted-foreground">
+                    — {story.attribution} · {story.role}
+                  </p>
+                </div>
+              </div>
+            </Reveal>
+          );
+        })}
+      </div>
+
+      {/* ── Desktop Dynamic Trusted Collaboration ── */}
+      <div className="hidden md:block">
+        <TrustedCollaborationSection activeId={activeProjectId} />
+      </div>
+
+      {/* ── Section Footer ── */}
+      <div className="mx-auto max-w-6xl pb-[10vh] md:pb-[14vh]">
+        <div className="border-t border-border/40 pt-7 flex items-center justify-between">
+          <p className="text-[10px] font-medium text-muted-foreground/50 uppercase tracking-widest">
+            03 systems · built end-to-end
+          </p>
+          <a
+            href="#contact"
+            className="text-xs font-semibold text-foreground transition-colors hover:text-copper"
+          >
+            Start a project →
+          </a>
+        </div>
+      </div>
+
+      {/* ── Case Study Modal ── */}
       <CaseStudyModal
         study={selectedStudy}
         onClose={() => setSelectedStudy(null)}

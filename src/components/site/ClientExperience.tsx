@@ -1,4 +1,8 @@
 import { Reveal } from "./Reveal";
+import { Backdrop } from "./Backdrop";
+import bgApproach2 from "@/assets/bg-approach-2.jpg";
+import bgClosing1 from "@/assets/bg-closing-1.jpg";
+
 
 const clientPrinciples = [
   {
@@ -26,6 +30,7 @@ const clientPrinciples = [
 export function ClientExperience() {
   return (
     <section className="relative isolate px-5 py-[10vh] sm:px-6 md:py-[14vh] border-y border-border">
+      <Backdrop layers={[{ src: bgApproach2 }, { src: bgClosing1 }]} intensity={0.35} />
       <div className="mx-auto max-w-6xl space-y-12">
         <Reveal>
           <div className="max-w-2xl space-y-3">

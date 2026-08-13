@@ -1,63 +1,38 @@
 import { Reveal } from "./Reveal";
+import { Backdrop } from "./Backdrop";
+import bgApproach1 from "@/assets/bg-approach-1.jpg";
+import bgLayers2 from "@/assets/bg-layers-2.jpg";
 
-const industriesList = [
-  {
-    title: "Mobility & Transportation",
-    description: "Traffic intelligence, fleet analytics, route intelligence, and predictive systems.",
-  },
-  {
-    title: "Healthcare",
-    description: "Prediction systems, health analytics, intelligent workflows, and decision support.",
-  },
-  {
-    title: "Enterprise",
-    description: "Internal AI tools, workflow automation, knowledge systems, and intelligent business applications.",
-  },
-  {
-    title: "SaaS & Startups",
-    description: "AI-native products, MVPs, intelligent features, and scalable AI infrastructure.",
-  },
-  {
-    title: "Retail & Sustainability",
-    description: "Computer vision, recommendation systems, forecasting, and intelligent operational tools.",
-  },
-  {
-    title: "Research & Innovation",
-    description: "AI prototypes, experimental systems, technical research, and proof-of-concept development.",
-  },
+const teamsList = [
+  "Startups",
+  "Businesses",
+  "Research Teams",
+  "Innovation Teams",
 ];
 
 export function Industries() {
   return (
     <section className="relative isolate px-5 py-[10vh] sm:px-6 md:py-[14vh]">
+      <Backdrop layers={[{ src: bgApproach1 }, { src: bgLayers2 }]} intensity={0.35} />
       <div className="mx-auto max-w-6xl space-y-12">
         <Reveal>
           <div className="max-w-2xl space-y-3">
             <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-copper">
-              Industry Focus
+              WHO WE WORK WITH
             </p>
-            <h2 className="display-xl text-balance text-[clamp(2rem,7vw,3.6rem)] leading-none">
-              Intelligence without industry boundaries.
+            <h2 className="display-xl text-balance text-[clamp(2rem,7vw,3.6rem)] leading-none text-foreground font-extrabold">
+              Built for teams solving real problems.
             </h2>
-            <p className="text-[15px] leading-relaxed text-muted-foreground sm:text-[17px]">
-              We work across domains where intelligent systems can create measurable value.
-            </p>
           </div>
         </Reveal>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {industriesList.map((ind, i) => (
-            <Reveal key={ind.title} delay={i * 0.05}>
-              <div className="flex flex-col justify-between h-full rounded-2xl border border-border bg-surface p-6 sm:p-8 space-y-3 touch-manipulation transition-all duration-300 hover:border-copper/40 hover:-translate-y-1">
-                <span className="text-[10px] font-bold tracking-widest text-copper uppercase">
-                  0{i + 1} DOMAIN
-                </span>
-                <h3 className="display-xl text-lg font-bold text-foreground">
-                  {ind.title}
+        <div className="grid gap-6 grid-cols-2 lg:grid-cols-4">
+          {teamsList.map((team, i) => (
+            <Reveal key={team} delay={i * 0.05}>
+              <div className="flex flex-col justify-center items-center h-28 rounded-2xl border border-border/40 bg-surface/50 backdrop-blur-md p-6 text-center touch-manipulation transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-copper/45 hover:-translate-y-1 hover:shadow-lg hover:shadow-copper/[0.02]">
+                <h3 className="display-xl text-md font-bold text-foreground">
+                  {team}
                 </h3>
-                <p className="text-xs leading-relaxed text-muted-foreground">
-                  {ind.description}
-                </p>
               </div>
             </Reveal>
           ))}

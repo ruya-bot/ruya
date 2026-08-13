@@ -1,53 +1,47 @@
 import { Reveal } from "./Reveal";
+import { Backdrop } from "./Backdrop";
+import bgStack1 from "@/assets/bg-stack-1.jpg";
+import bgLayers1 from "@/assets/bg-layers-1.jpg";
+
 
 const principles = [
   {
-    title: "AI-first thinking",
-    description: "Determine when AI is actually useful — and when simple engineering is better.",
+    title: "Research",
+    description: "We go deep before we build.",
   },
   {
-    title: "End-to-end execution",
-    description: "Connect research, infrastructure, APIs, data, deployment, and product experience.",
+    title: "Product",
+    description: "We think beyond the model.",
   },
   {
-    title: "Built around real problems",
-    description: "Every system begins with a real user, workflow, business constraint, or measurable goal.",
+    title: "Engineering",
+    description: "We build the complete system.",
   },
   {
-    title: "Fast experimentation",
-    description: "Move quickly from initial problem statement to tangible, functional prototype.",
-  },
-  {
-    title: "Human-centered AI",
-    description: "Technology should augment people rather than make products unnecessarily complicated.",
-  },
-  {
-    title: "Designed for the future",
-    description: "Build with extensibility, maintainability, and future AI capabilities in mind.",
+    title: "Purpose",
+    description: "We solve problems that matter.",
   },
 ];
 
 export function WhyRuya() {
   return (
     <section className="relative isolate px-5 py-[10vh] sm:px-6 md:py-[14vh] bg-surface/50 border-y border-border">
+      <Backdrop layers={[{ src: bgStack1 }, { src: bgLayers1 }]} intensity={0.3} />
       <div className="mx-auto max-w-6xl space-y-12">
         <Reveal>
           <div className="max-w-2xl space-y-3">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-copper">
-              Why Ru'ya Studio
-            </p>
-            <h2 className="display-xl text-balance text-[clamp(2rem,7vw,3.6rem)] leading-none">
-              Research depth. Product thinking. Engineering discipline.
+            <h2 className="display-xl text-balance text-[clamp(2rem,7vw,3.6rem)] leading-none text-foreground">
+              Research depth. <span className="text-copper-gradient">Product thinking. Engineering discipline.</span>
             </h2>
           </div>
         </Reveal>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {principles.map((p, i) => (
             <Reveal key={p.title} delay={i * 0.05}>
               <div className="rounded-2xl border border-border bg-background p-6 sm:p-8 space-y-3 touch-manipulation transition-all duration-300 hover:border-copper/40 hover:-translate-y-1">
                 <span className="text-[10px] font-bold tracking-widest text-copper uppercase">
-                  PRINCIPLE 0{i + 1}
+                  0{i + 1}
                 </span>
                 <h3 className="display-xl text-lg font-bold text-foreground">
                   {p.title}

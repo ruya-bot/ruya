@@ -3,13 +3,8 @@ import { StudioThesis } from "./StudioThesis";
 import { Capabilities } from "./Capabilities";
 import { Process } from "./Process";
 import { SelectedWork } from "./SelectedWork";
-import { WorkMetrics } from "./WorkMetrics";
+import { ProblemsWeSolve } from "./ProblemsWeSolve";
 import { Industries } from "./Industries";
-import { WhyRuya } from "./WhyRuya";
-import { EngagementModels } from "./EngagementModels";
-import { ClientExperience } from "./ClientExperience";
-import { Technology } from "./Technology";
-import { ResearchDirection } from "./ResearchDirection";
 import { Founder } from "./Founder";
 import { FinalCTA } from "./FinalCTA";
 import { Contact } from "./Contact";
@@ -37,29 +32,41 @@ function SectionSeam() {
 export function Sections() {
   return (
     <>
+      {/* 2. ABOUT */}
       <StudioThesis />
       <SectionSeam />
+
+      {/* 3. CAPABILITIES */}
       <Capabilities />
       <SectionSeam />
+
+      {/* 4. HOW WE THINK */}
+      <ProblemsWeSolve />
+      <SectionSeam />
+
+      {/* 5. WORK */}
+      <SelectedWork />
+      <SectionSeam />
+
+      {/* 5. PROCESS */}
       <Process />
       <SectionSeam />
-      <SelectedWork />
-      <WorkMetrics />
-      <SectionSeam />
+
+      {/* 6. WHO WE WORK WITH */}
       <Industries />
-      <WhyRuya />
       <SectionSeam />
-      <EngagementModels />
-      <ClientExperience />
-      <SectionSeam />
-      <Technology />
-      <SectionSeam />
-      <ResearchDirection />
-      <SectionSeam />
+
+      {/* 7. FOUNDER */}
       <Founder />
       <SectionSeam />
+
+      {/* 8. FINAL CTA */}
       <FinalCTA />
+
+      {/* 9. CONTACT */}
       <Contact />
+
+      {/* 10. FOOTER */}
       <Footer />
     </>
   );

@@ -1,4 +1,8 @@
 import { Reveal } from "./Reveal";
+import { Backdrop } from "./Backdrop";
+import bgLayers2 from "@/assets/bg-layers-2.jpg";
+import bgWork2 from "@/assets/bg-work-2.jpg";
+
 
 const models = [
   {
@@ -26,6 +30,7 @@ const models = [
 export function EngagementModels() {
   return (
     <section className="relative isolate px-5 py-[10vh] sm:px-6 md:py-[14vh]">
+      <Backdrop layers={[{ src: bgLayers2 }, { src: bgWork2 }]} intensity={0.35} />
       <div className="mx-auto max-w-6xl space-y-12">
         <Reveal>
           <div className="max-w-2xl space-y-3">
